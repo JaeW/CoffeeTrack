@@ -66,20 +66,8 @@ public class CoffeeProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
-        switch (sUriMatcher.match(uri)) {
-            case COFFEE:
-                return CoffeeContract.CoffeeEntry.CONTENT_TYPE;
-            case COFFEE_ID:
-                return CoffeeContract.CoffeeEntry.CONTENT_ITEM_TYPE;
-            default:
-                throw new UnsupportedOperationException("Unknown uri:  " + uri);
-        }
-    }
-
-    @Nullable
-    @Override
     public Uri insert(Uri uri, ContentValues values) {
+        validate(values);
         SQLiteDatabase database = mCoffeeHelper.getWritableDatabase();
         long id;
         Uri returnUri;
@@ -110,4 +98,27 @@ public class CoffeeProvider extends ContentProvider {
         //TODO:  implement update method
         return 0;
     }
+
+    @Nullable
+    @Override
+    public String getType(Uri uri) {
+        switch (sUriMatcher.match(uri)) {
+            case COFFEE:
+                return CoffeeContract.CoffeeEntry.CONTENT_TYPE;
+            case COFFEE_ID:
+                return CoffeeContract.CoffeeEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri:  " + uri);
+        }
+    }
+
+    private void validate(ContentValues values) {
+        //ensure time value to be inserted into db is valid
+        Long coffeeTime = values.getAsLong(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME);
+
+        if (coffeeTime == null || coffeeTime < 0) {
+            throw new IllegalArgumentException("coffee time requires valid long integer");
+        }
+    }
+
 }
