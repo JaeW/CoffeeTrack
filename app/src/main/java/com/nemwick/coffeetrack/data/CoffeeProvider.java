@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-
 public class CoffeeProvider extends ContentProvider {
     public static final int COFFEE = 100;
     public static final int COFFEE_ID = 101;
@@ -89,13 +88,24 @@ public class CoffeeProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        //TODO:  implement delete method
-        return 0;
+        SQLiteDatabase database = mCoffeeHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case COFFEE:
+                return database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+            case COFFEE_ID:
+                selection = CoffeeContract.CoffeeEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        //TODO:  implement update method
+        //Intentionally left blank.  Current app functionality does not allow user to update records
         return 0;
     }
 
@@ -116,7 +126,7 @@ public class CoffeeProvider extends ContentProvider {
         //ensure time value to be inserted into db is valid
         Long coffeeTime = values.getAsLong(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME);
 
-        if (coffeeTime == null || coffeeTime < 0) {
+        if (coffeeTime == null || coffeeTime <= 0) {
             throw new IllegalArgumentException("coffee time requires valid long integer");
         }
     }
