@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_coffee_list"
         android:layout_width="match_parent"
@@ -22,9 +17,10 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="@dimen/fab_layout_margin"
         android:layout_marginRight="@dimen/fab_layout_margin"
-        android:src="@drawable/ic_done_black_24dp"
+        android:src="@drawable/ic_done"
         app:fabSize="normal"
         app:layout_anchor="@id/rv_coffee_list"
         app:layout_anchorGravity="bottom|right|end" />
+
 
 </android.support.design.widget.CoordinatorLayout>
