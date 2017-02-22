@@ -12,6 +12,7 @@
         android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
@@ -21,6 +22,5 @@
         app:fabSize="normal"
         app:layout_anchor="@id/rv_coffee_list"
         app:layout_anchorGravity="bottom|right|end" />
-
 
 </android.support.design.widget.CoordinatorLayout>
