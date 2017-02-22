@@ -23,7 +23,7 @@ public class CoffeeContract {
         public static final String TABLE_NAME = "coffee";
         //primary key auto-incrementing
         public static final String _ID = BaseColumns._ID;
-        /* date/time coffee was consumed */
+        /* date/time coffee was consumed saved in Unix time */
         public static final String COLUMN_COFFEE_TIME = "time";
 
         public static Uri buildCoffeeUri(long id) {

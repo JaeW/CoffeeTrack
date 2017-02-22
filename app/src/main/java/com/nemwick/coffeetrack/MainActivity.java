@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbarMain);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabClickListener);
     }
@@ -40,6 +43,4 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Success!  Coffee added to db", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

@@ -6,10 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+
+        android:background="@color/colorPrimary"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_coffee_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -22,5 +31,8 @@
         app:fabSize="normal"
         app:layout_anchor="@id/rv_coffee_list"
         app:layout_anchorGravity="bottom|right|end" />
+
+
+
 
 </android.support.design.widget.CoordinatorLayout>
