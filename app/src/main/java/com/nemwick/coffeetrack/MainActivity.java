@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNewCoffee() {
-        Long timeStamp = System.currentTimeMillis()/1000;
         ContentValues values = new ContentValues();
-        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, timeStamp);
+        values.put(CoffeeContract.CoffeeEntry.COLUMN_LATITUDE, 1);
+        values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
+        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, java.lang.System.currentTimeMillis());
         lastAddedCoffeeUri = getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
         if(lastAddedCoffeeUri == null){
             Toast.makeText(this, "Coffee was not added to db", Toast.LENGTH_SHORT).show();

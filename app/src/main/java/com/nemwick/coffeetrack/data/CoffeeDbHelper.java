@@ -12,7 +12,9 @@ public class CoffeeDbHelper extends SQLiteOpenHelper {
     public static final String SQL_CREATE_COFFEE_TABLE = "CREATE TABLE "
             + CoffeeContract.CoffeeEntry.TABLE_NAME + "("
             + CoffeeContract.CoffeeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " INTEGER NOT NULL);";
+            + CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " INTEGER NOT NULL, "
+            + CoffeeContract.CoffeeEntry.COLUMN_LATITUDE + " INTEGER NOT NULL DEFAULT 0, "
+            + CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE + " INTEGER NOT NULL DEFAULT 0);";
 
     public static final String SQL_DELETE_COFFEE_TABLE = "DROP TABLE IF EXISTS "
             + CoffeeContract.CoffeeEntry.TABLE_NAME;

@@ -56,7 +56,7 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     private String formatDateTime(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a - MMM DD, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a - MMM dd, yyyy");
         return dateFormat.format(dateObject);
     }
 

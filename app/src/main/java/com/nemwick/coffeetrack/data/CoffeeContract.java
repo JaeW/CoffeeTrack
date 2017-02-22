@@ -25,6 +25,10 @@ public class CoffeeContract {
         public static final String _ID = BaseColumns._ID;
         /* date/time coffee was consumed saved in Unix time */
         public static final String COLUMN_COFFEE_TIME = "time";
+        // latitude of location where coffee was consumed
+        public static final String COLUMN_LATITUDE = "latitute";
+        //longitude of location where coffee was consumed
+        public static final String COLUMN_LONGITUDE = "longitude";
 
         public static Uri buildCoffeeUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
