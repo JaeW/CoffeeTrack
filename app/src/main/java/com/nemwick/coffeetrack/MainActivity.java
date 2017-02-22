@@ -14,13 +14,6 @@ import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
-
-/*TODO:  Debugging
-1.  Complete:  Check to make sure date/time is being added to db - it is
-2.  Read over loaders and cursor loaders to find out what the order of operations for loaders should be
-3.  consider a more simplistic xml interface just to get the damn thing working
- */
-
 public class MainActivity extends AppCompatActivity {
 
     private Uri lastAddedCoffeeUri; //TODO:  consider adding to saved preferences instead of variable
