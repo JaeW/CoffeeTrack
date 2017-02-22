@@ -1,20 +1,32 @@
 package com.nemwick.coffeetrack;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
+
+/*TODO:  Debugging
+1.  Complete:  Check to make sure date/time is being added to db - it is
+2.  Read over loaders and cursor loaders to find out what the order of operations for loaders should be
+3.  consider a more simplistic xml interface just to get the damn thing working
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private Uri lastAddedCoffeeUri; //TODO:  consider adding to saved preferences instead of variable
     private FloatingActionButton fab;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
     private View.OnClickListener fabClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -30,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMain);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabClickListener);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_coffee_list);
+        layoutManager = new LinearLayoutManager(this);
+        Cursor cursor = getContentResolver().query(CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, null);
+        RecyclerViewCursorAdapter recyclerViewCursorAdapter = new RecyclerViewCursorAdapter(cursor);
+        recyclerView.setAdapter(recyclerViewCursorAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+
     }
 
     private void addNewCoffee() {

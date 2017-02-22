@@ -1,6 +1,7 @@
 package com.nemwick.coffeetrack;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import java.util.Date;
 
 public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerViewCursorAdapter.CoffeeHolder> {
     private Cursor coffeeCursor;
+
+    public RecyclerViewCursorAdapter(Cursor coffeeCursor) {
+        this.coffeeCursor = coffeeCursor;
+    }
 
     @Override
     public CoffeeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
