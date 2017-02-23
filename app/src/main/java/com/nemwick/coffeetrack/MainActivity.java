@@ -55,11 +55,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, java.lang.System.currentTimeMillis());
         lastAddedCoffeeUri = getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
-        if(lastAddedCoffeeUri == null){
-            Toast.makeText(this, "Coffee was not added to db", Toast.LENGTH_SHORT).show();
-        } else{
-            Toast.makeText(this, "Success!  Coffee added to db", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
