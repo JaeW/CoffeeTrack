@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +17,14 @@ import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int LOADER_ID = 111;
     private Uri lastAddedCoffeeUri; //TODO:  consider adding to saved preferences instead of variable
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
+    private RecyclerViewCursorAdapter adapter;
     private View.OnClickListener fabClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -37,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(fabClickListener);
         recyclerView = (RecyclerView) findViewById(R.id.rv_coffee_list);
         layoutManager = new LinearLayoutManager(this);
-        Cursor cursor = getContentResolver().query(CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, null);
-        RecyclerViewCursorAdapter recyclerViewCursorAdapter = new RecyclerViewCursorAdapter(cursor);
-        recyclerView.setAdapter(recyclerViewCursorAdapter);
+        adapter = new RecyclerViewCursorAdapter();
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
     }
 
@@ -55,5 +60,20 @@ public class MainActivity extends AppCompatActivity {
         } else{
             Toast.makeText(this, "Success!  Coffee added to db", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.setCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.setCursor(null);
     }
 }

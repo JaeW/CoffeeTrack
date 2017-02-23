@@ -60,6 +60,7 @@ public class CoffeeProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri:  " + uri);
         }
+        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return returnCursor;
     }
 
@@ -83,24 +84,29 @@ public class CoffeeProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown Uri:  " + uri);
         }
+        notifyChanges(uri);
         return returnUri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase database = mCoffeeHelper.getWritableDatabase();
-
+        int rowsDeleted = 0;
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case COFFEE:
-                return database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case COFFEE_ID:
                 selection = CoffeeContract.CoffeeEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(CoffeeContract.CoffeeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
+        notifyChanges(uri);
+        return rowsDeleted;
     }
 
     @Override
@@ -131,4 +137,9 @@ public class CoffeeProvider extends ContentProvider {
         }
     }
 
+    private void notifyChanges(Uri uri) {
+        if (getContext() != null && getContext().getContentResolver() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+    }
 }

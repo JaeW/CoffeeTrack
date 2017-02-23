@@ -17,8 +17,8 @@ import java.util.Date;
 public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerViewCursorAdapter.CoffeeHolder> {
     private Cursor coffeeCursor;
 
-    public RecyclerViewCursorAdapter(Cursor coffeeCursor) {
-        this.coffeeCursor = coffeeCursor;
+    public RecyclerViewCursorAdapter() {
+        //intentionally left blank
     }
 
     @Override
