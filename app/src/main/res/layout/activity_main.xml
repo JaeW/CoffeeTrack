@@ -26,11 +26,12 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="@dimen/fab_layout_margin"
         android:layout_marginRight="@dimen/fab_layout_margin"
-        android:src="@drawable/ic_done"
+        android:src="@drawable/ic_coffee_outline"
         app:fabSize="normal"
         app:layout_anchor="@id/rv_coffee_list"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.nemwick.coffeetrack.ScrollAwareFABBehavior" />
+        app:layout_behavior="com.nemwick.coffeetrack.ScrollAwareFABBehavior"
+        android:tint="@color/colorIcons" />
 
 
 </android.support.design.widget.CoordinatorLayout>
