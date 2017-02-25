@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Coffee Track</string>
+    <string name="item_menu_coffee_stats">View Coffee Stats</string>
 </resources>
