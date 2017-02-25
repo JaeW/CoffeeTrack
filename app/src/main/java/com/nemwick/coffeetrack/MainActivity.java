@@ -2,6 +2,7 @@ package com.nemwick.coffeetrack;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,10 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
-import com.nemwick.coffeetrack.data.CoffeeProvider;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 case android.support.design.R.id.snackbar_action:
                     getContentResolver().delete(lastAddedCoffeeUri, null, null);
                     lastAddedCoffeeUri = getLastAddedCoffeeUri();
+                    break;
             }
         }
     };
@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_coffee_stats:
-                //TODO:  Launch coffee stats activity using explicit intent
+                Intent intent = new Intent(this, CoffeeStatsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

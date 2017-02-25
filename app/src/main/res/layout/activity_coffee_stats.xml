@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_coffee_stats"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nemwick.coffeetrack.CoffeeStatsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_statistics"
+        style="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/toolbar_elevation"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:layout_below="@id/toolbar_statistics">
+
+        <TextView
+            android:text="@string/statistics_today"
+            android:layout_columnWeight="2"/>
+
+        <TextView
+            android:id="@+id/cups_today"
+            android:hint="3"
+            android:layout_columnWeight="1"/>
+
+
+        <TextView
+            android:text="@string/statistics_this_week"
+            android:layout_columnWeight="2"/>
+
+        <TextView
+            android:id="@+id/cups_week"
+            android:hint="12"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:text="@string/statistics_this_month"
+            android:layout_columnWeight="2"/>
+
+        <TextView
+            android:id="@+id/cups_month"
+            android:hint="40"
+            android:layout_columnWeight="1"/>
+
+    </GridLayout>
+
+</RelativeLayout>

@@ -3,4 +3,8 @@
     <string name="item_menu_coffee_stats">View Coffee Stats</string>
     <string name="snackbar_coffee_recorded">Coffee Recorded</string>
     <string name="snackbar_undo">UNDO</string>
+    <string name="activity_coffee_stats_label">Cups Consumption</string>
+    <string name="statistics_this_week">This Week</string>
+    <string name="statistics_today">Today</string>
+    <string name="statistics_this_month">This Month</string>
 </resources>
