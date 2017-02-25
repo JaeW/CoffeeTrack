@@ -1,14 +1,19 @@
 package com.nemwick.coffeetrack;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,19 +23,32 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
+import com.nemwick.coffeetrack.data.CoffeeProvider;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 111;
+    public static final String COFFEE_PREFERENCES = "preferenceFile";
+    public static final String LAST_SAVED = "lastCoffeeSaved";
     private Uri lastAddedCoffeeUri; //TODO:  consider adding to saved preferences instead of variable
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private RecyclerViewCursorAdapter adapter;
-    private View.OnClickListener fabClickListener = new View.OnClickListener() {
+    private Snackbar snackbar;
+
+    private View.OnClickListener mainClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            addNewCoffee();
+            switch (v.getId()) {
+                case R.id.fab:
+                    addNewCoffee();
+                    snackbar.show();
+                    break;
+                case android.support.design.R.id.snackbar_action:
+                    getContentResolver().delete(lastAddedCoffeeUri, null, null);
+                    lastAddedCoffeeUri = getLastAddedCoffeeUri();
+            }
         }
     };
 
@@ -39,9 +57,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+        snackbar = Snackbar.make(coordinatorLayout, R.string.snackbar_coffee_recorded, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo, this.mainClickListener);
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         setSupportActionBar(toolbarMain);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(fabClickListener);
+        fab.setOnClickListener(mainClickListener);
         recyclerView = (RecyclerView) findViewById(R.id.rv_coffee_list);
         layoutManager = new LinearLayoutManager(this);
         adapter = new RecyclerViewCursorAdapter();
@@ -49,6 +71,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView.setLayoutManager(layoutManager);
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveLastAddedCoffeeUri(lastAddedCoffeeUri);
     }
 
     private void addNewCoffee() {
@@ -90,4 +118,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return super.onOptionsItemSelected(item);
         }
     }
-}
+
+    //store the uri for the coffee last added to the db
+    public void saveLastAddedCoffeeUri(Uri uri) {
+        if (lastAddedCoffeeUri != null) {
+            SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(LAST_SAVED, uri.toString());
+            editor.apply();
+        }
+    }
+
+    public Uri getLastAddedCoffeeUri() {
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        String lastSavedUri = preferences.getString(LAST_SAVED, CoffeeContract.CoffeeEntry.CONTENT_URI + "0");
+        return Uri.parse(lastSavedUri);
+    }
+
+}//end MainActivity
