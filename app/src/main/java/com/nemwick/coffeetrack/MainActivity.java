@@ -29,10 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final int LOADER_ID = 111;
     public static final String COFFEE_PREFERENCES = "preferenceFile";
     public static final String LAST_SAVED = "lastCoffeeSaved";
-    private Uri lastAddedCoffeeUri; //TODO:  consider adding to saved preferences instead of variable
-    private FloatingActionButton fab;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
+    private Uri lastAddedCoffeeUri;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
 
@@ -56,19 +53,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //toolbar setup
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbarMain);
+
+        //snackbar setup
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         snackbar = Snackbar.make(coordinatorLayout, R.string.snackbar_coffee_recorded, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_undo, this.mainClickListener);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-        setSupportActionBar(toolbarMain);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        //fab setup
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(mainClickListener);
-        recyclerView = (RecyclerView) findViewById(R.id.rv_coffee_list);
-        layoutManager = new LinearLayoutManager(this);
+
+        //recyclerview setup
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_coffee_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new RecyclerViewCursorAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
+        //cursorloader initialization
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
     }
