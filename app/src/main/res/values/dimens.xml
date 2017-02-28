@@ -5,4 +5,6 @@
     <dimen name="row_holder_top_bottom_padding">10dp</dimen>
     <dimen name="fab_layout_margin">16dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="widget_top_bottom_padding">4dp</dimen>
+    <dimen name="widget_left_right_padding">8dp</dimen>
 </resources>
