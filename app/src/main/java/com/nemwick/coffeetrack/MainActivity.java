@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, null);
+        String sortOrder = CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " DESC";
+        return new CursorLoader(this, CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, sortOrder);
     }
 
     @Override
