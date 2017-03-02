@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nemwick.coffeetrack">
 
+    <uses-feature
+        android:name="android.software.app_widgets"
+        android:required="true" />
+
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -17,6 +21,21 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".CoffeeWidgetProvider"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider"
+                />
+
+
+
+        </receiver>
+
         <provider
             android:name=".data.CoffeeProvider"
             android:authorities="com.nemwick.coffeetrack"
@@ -24,8 +43,7 @@
 
         <activity
             android:name=".CoffeeStatsActivity"
-            android:label="@string/activity_coffee_stats_label">
-        </activity>
+            android:label="@string/activity_coffee_stats_label"></activity>
     </application>
 
 </manifest>

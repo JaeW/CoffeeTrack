@@ -8,7 +8,8 @@
     android:paddingBottom="@dimen/widget_top_bottom_padding"
     android:paddingLeft="@dimen/widget_left_right_padding"
     android:paddingRight="@dimen/widget_left_right_padding"
-    android:paddingTop="@dimen/widget_top_bottom_padding">
+    android:paddingTop="@dimen/widget_top_bottom_padding"
+    android:background="@drawable/widget_frame">
 
     <LinearLayout
         android:id="@+id/widget_Layout_last_coffee_was"

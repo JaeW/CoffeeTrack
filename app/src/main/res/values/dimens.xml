@@ -7,4 +7,6 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="widget_top_bottom_padding">4dp</dimen>
     <dimen name="widget_left_right_padding">8dp</dimen>
+    <dimen name="widget_min_width">144dp</dimen>
+    <dimen name="widget_min_height">56dp</dimen>
 </resources>
