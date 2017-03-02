@@ -22,6 +22,7 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
     public static final int DAY = 1;
     public static final int WEEK = 7;
     public static final int MONTH = 30;
+    public static final String TAG = "CoffeeStatsActivity:  ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +59,21 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         int dayTotal = 0;
         long weekInMillis = this.calculatePriorDateInMillis(WEEK); //Unix date in millis for one week prior to today
         long dayInMillis = this.calculatePriorDateInMillis(DAY); //Unix date in millis for one day prior to today
+        //on screen rotation, 3 text view values must be recalculated
+        //the Cursor, however, is stuck in the last position and does not move back to first
+        // position if not explicitly directed to do so
+        data.moveToFirst();
+        while (data.moveToNext()) {
+            long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
+            if (weekInMillis <= tempTimeValue) {
+                weekTotal++;
+            }  //if coffee drunk after one week ago timestamp, increment
+            if (dayInMillis <= tempTimeValue) {
+                dayTotal++;
+            } //if coffee drunk after one day ago timestampe, increment
+        }
 
-            while (data.moveToNext()) {
-                long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
-                if (weekInMillis <= tempTimeValue) { weekTotal++;}  //if coffee drunk after one week ago timestamp, increment
-                if(dayInMillis <= tempTimeValue){dayTotal++;} //if coffee drunk after one day ago timestampe, increment
-            }
-
+        //populate TextViews with values
         this.monthCupsCoffee.setText(Long.toString(monthTotal));
         this.weekCupsCoffee.setText(Long.toString(weekTotal));
         this.dayCupsCoffee.setText(Long.toString(dayTotal));
@@ -72,13 +81,13 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        //intentionally left empty
     }
 
     private long calculatePriorDateInMillis(int days) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DATE, c.get(Calendar.DATE) - days);
+        long value = c.getTimeInMillis();
         return c.getTimeInMillis();
     }
-
 }

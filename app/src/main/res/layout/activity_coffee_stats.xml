@@ -30,7 +30,6 @@
 
         <TextView
             android:id="@+id/cups_today"
-            android:hint="3"
             android:layout_columnWeight="1"/>
 
 
@@ -40,7 +39,6 @@
 
         <TextView
             android:id="@+id/cups_week"
-            android:hint="12"
             android:layout_columnWeight="1"/>
 
         <TextView
@@ -49,7 +47,6 @@
 
         <TextView
             android:id="@+id/cups_month"
-            android:hint="40"
             android:layout_columnWeight="1"/>
 
     </GridLayout>
