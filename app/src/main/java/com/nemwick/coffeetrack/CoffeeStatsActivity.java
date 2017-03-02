@@ -62,7 +62,7 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         //on screen rotation, 3 text view values must be recalculated
         //the Cursor, however, is stuck in the last position and does not move back to first
         // position if not explicitly directed to do so
-        data.moveToFirst();
+        data.moveToPosition(-1);
         while (data.moveToNext()) {
             long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
             if (weekInMillis <= tempTimeValue) {
