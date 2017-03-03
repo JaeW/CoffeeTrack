@@ -11,26 +11,27 @@
     android:paddingTop="@dimen/widget_top_bottom_padding"
     android:background="@drawable/widget_frame">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/widget_Layout_last_coffee_was"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:orientation="vertical">
+        android:layout_weight="2">
 
         <TextView
+            android:id="@+id/text_last_coffee"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
             android:text="@string/last_coffee_was"/>
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_last_coffee"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <ImageButton
         android:id="@+id/widget_coffee_button"
