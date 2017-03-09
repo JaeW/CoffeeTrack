@@ -24,8 +24,8 @@
             android:layout_alignParentLeft="true"
             android:text="@string/last_coffee_was"/>
 
-        <Chronometer
-            android:id="@+id/chronometer"
+        <TextView
+            android:id="@+id/date_time_last_coffee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_last_coffee"/>

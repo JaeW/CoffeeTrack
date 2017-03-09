@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //cursorloader initialization
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
     }
 
     @Override

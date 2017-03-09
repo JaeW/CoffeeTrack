@@ -7,6 +7,8 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="widget_top_bottom_padding">4dp</dimen>
     <dimen name="widget_left_right_padding">8dp</dimen>
-    <dimen name="widget_min_width">160dp</dimen>
-    <dimen name="widget_min_height">46dp</dimen>
+    <!-- android recommeded for 3 cells (70 * n) - 30 -->
+    <dimen name="widget_min_width">180dp</dimen>
+    <!-- android recommended for 1 cell -->
+    <dimen name="widget_min_height">40dp</dimen>
 </resources>
