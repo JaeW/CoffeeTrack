@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -35,6 +34,9 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+        SharedPreferences pref = context.getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        coffeeTime = pref.getLong(LAST_SAVED_TIME, 1234);
 
         ComponentName me = new ComponentName(context, CoffeeWidgetProvider.class);
         appWidgetManager.updateAppWidget(me, buildUpdate(context, appWidgetIds));
