@@ -27,9 +27,11 @@ import com.nemwick.coffeetrack.data.CoffeeContract;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 111;
-    public static final String COFFEE_PREFERENCES = "preferenceFile";
-    public static final String LAST_SAVED = "lastCoffeeSaved";
+    public static final String COFFEE_PREFERENCES = "preferenceFile"; //key to retrieve saved preferences file
+    public static final String LAST_SAVED = "lastCoffeeSaved"; //key to save/retrieve most recent uri to saved preferences
+    public static final String LAST_SAVED_TIME = "lastSavedTime"; //key to save/retrieve time last coffee consumed
     private Uri lastAddedCoffeeUri;
+    private long lastAddedCoffeeTime;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
 
@@ -77,19 +79,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //cursorloader initialization
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
     }
 
     @Override
     protected void onStop() {
+        saveLastAddedCoffee(lastAddedCoffeeUri, lastAddedCoffeeTime);
         super.onStop();
-        saveLastAddedCoffeeUri(lastAddedCoffeeUri);
     }
 
     private void addNewCoffee() {
+        lastAddedCoffeeTime = java.lang.System.currentTimeMillis();
         ContentValues values = new ContentValues();
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LATITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
-        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, java.lang.System.currentTimeMillis());
+        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, lastAddedCoffeeTime);
         lastAddedCoffeeUri = getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
     }
 
@@ -128,16 +132,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     //store the uri for the coffee last added to the db
-    public void saveLastAddedCoffeeUri(Uri uri) {
+    private void saveLastAddedCoffee(Uri uri, Long lastTime) {
         if (lastAddedCoffeeUri != null) {
             SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(LAST_SAVED, uri.toString());
+            editor.putLong(LAST_SAVED_TIME, lastTime);
             editor.apply();
         }
     }
 
-    public Uri getLastAddedCoffeeUri() {
+    private Uri getLastAddedCoffeeUri() {
         SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         String lastSavedUri = preferences.getString(LAST_SAVED, CoffeeContract.CoffeeEntry.CONTENT_URI + "0");
         return Uri.parse(lastSavedUri);
