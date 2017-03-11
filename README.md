@@ -8,7 +8,7 @@ Drink a cup of coffee and tap a button on my smartphone.  Have a widget that sho
 
 To be implemented in 3 phases:
 
-1.  Simple tracking of each time coffee is consumed.  Data recorded in a SQLite database through a Content Provider. Listing of each 
+1.  [Completed 2017-03-10] Simple tracking of each time coffee is consumed.  Data recorded in a SQLite database through a Content Provider. Listing of each 
 time coffee was consumed in main activity with FAB button serving to add a new cup of coffee record to db.  Additionally, a home screen
 widget will display the last time a cup was consumed along with a button to add cup of coffee consumed record to db.  Overflow menu
 provides option to view coffee consumption for the past day, week and month in new activity.  
