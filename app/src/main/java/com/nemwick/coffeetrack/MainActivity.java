@@ -1,5 +1,7 @@
 package com.nemwick.coffeetrack;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -40,8 +42,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fab:
-                    addNewCoffee();
-                    snackbar.show();
+                    addNewCoffee(); //AddNewCoffee does not save lastCoffeeTime or lastUri to saved preferences so snackbar can undo action
+                    snackbar.show();  //gives option to undo the addition of the record just added to ContentProvider db
+                    updateWidget(); //Saves the lastCoffeeTime value to shared preferences, creates broadcast intent and sends
                     break;
                 case android.support.design.R.id.snackbar_action:
                     getContentResolver().delete(lastAddedCoffeeUri, null, null);
@@ -50,6 +53,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }
     };
+
+    private void updateWidget() {
+        //Add last uri and last time to saved preferences
+        saveLastAddedCoffee(lastAddedCoffeeUri, lastAddedCoffeeTime);
+        //build broadcast intent
+        ComponentName name = new ComponentName(this.getApplicationContext(), CoffeeWidgetProvider.class);
+        int [] ids = AppWidgetManager.getInstance(getApplicationContext().getApplicationContext()).getAppWidgetIds(name);
+        Intent intent = new Intent(this, CoffeeWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
