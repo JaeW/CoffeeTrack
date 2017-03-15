@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String COFFEE_PREFERENCES = "preferenceFile"; //key to retrieve saved preferences file
     public static final String LAST_SAVED = "lastCoffeeSaved"; //key to save/retrieve most recent uri to saved preferences
     public static final String LAST_SAVED_TIME = "lastSavedTime"; //key to save/retrieve time last coffee consumed
-    private Uri lastAddedCoffeeUri;
-    private long lastAddedCoffeeTime;
+    private Uri previousAddedCoffeeUri; //uri value for coffee record 1 prior to most recent
+    private long previousAddedCoffeeTime; // time value for coffee record 1 prior to most recent
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
 
@@ -42,28 +42,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fab:
-                    addNewCoffee(); //AddNewCoffee does not save lastCoffeeTime or lastUri to saved preferences so snackbar can undo action
+                    addNewCoffee(); //AddNewCoffee saves lastCoffeeTime or lastUri to saved preferences
                     snackbar.show();  //gives option to undo the addition of the record just added to ContentProvider db
-                    updateWidget(); //Saves the lastCoffeeTime value to shared preferences, creates broadcast intent and sends
+                    updateWidget();  //updates widget textView with time of most recent coffee
                     break;
                 case android.support.design.R.id.snackbar_action:
-                    getContentResolver().delete(lastAddedCoffeeUri, null, null);
-                    lastAddedCoffeeUri = getLastAddedCoffeeUri();
+                    //delete most recent coffee record from db / content provider
+                    getContentResolver().delete(getLastAddedCoffeeUri(), null, null);
+                    //update Shared Preferences to reflect prior coffee is now the most recent coffee
+                    saveLastAddedCoffee(previousAddedCoffeeUri, previousAddedCoffeeTime);
+                    updateWidget();
                     break;
             }
         }
     };
 
     private void updateWidget() {
-        //Add last uri and last time to saved preferences
-        saveLastAddedCoffee(lastAddedCoffeeUri, lastAddedCoffeeTime);
-        //build broadcast intent
-        ComponentName name = new ComponentName(this.getApplicationContext(), CoffeeWidgetProvider.class);
-        int [] ids = AppWidgetManager.getInstance(getApplicationContext().getApplicationContext()).getAppWidgetIds(name);
-        Intent intent = new Intent(this, CoffeeWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        sendBroadcast(intent);
+        //TODO:  implement
     }
 
     @Override
@@ -97,19 +92,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    @Override
-    protected void onStop() {
-        saveLastAddedCoffee(lastAddedCoffeeUri, lastAddedCoffeeTime);
-        super.onStop();
-    }
-
     private void addNewCoffee() {
-        lastAddedCoffeeTime = java.lang.System.currentTimeMillis();
+        /* retrieve uri and time values for most recent coffee from shared preferences
+        and save locally in the event the undo feature is clicked on the snackbar and
+        values need to be saved back to shared preferences*/
+        previousAddedCoffeeTime = getLastAddedCoffeeTime();
+        previousAddedCoffeeUri = getLastAddedCoffeeUri();
+
+        /*add a new coffee record to db / content provider
+        although this is technically blocking the main UI, due to minimal time required to save non-sql-joined save
+         to db / content provider, decision was made to not use a service to perform this add  at this time */
+        long addedCoffeeTime= java.lang.System.currentTimeMillis(); //get current Unix time
         ContentValues values = new ContentValues();
+        //TODO:  update with current location coordinates
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LATITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
-        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, lastAddedCoffeeTime);
-        lastAddedCoffeeUri = getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
+        values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, addedCoffeeTime);
+        Uri lastAddedCoffeeUri = getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
+
+        //save new uri and time values to Shared Preferences
+        saveLastAddedCoffee(lastAddedCoffeeUri, addedCoffeeTime);
     }
 
     @Override
@@ -146,21 +148,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    //store the uri for the coffee last added to the db
+    //store the uri and time values for the coffee last added to the db & update Shared Preferences
     private void saveLastAddedCoffee(Uri uri, Long lastTime) {
-        if (lastAddedCoffeeUri != null) {
             SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(LAST_SAVED, uri.toString());
             editor.putLong(LAST_SAVED_TIME, lastTime);
+            //apply() functions asynchronously as opposed to commit() which does not
             editor.apply();
-        }
     }
 
+    //returns uri value from Shared Preferences of most recent coffee
     private Uri getLastAddedCoffeeUri() {
         SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         String lastSavedUri = preferences.getString(LAST_SAVED, CoffeeContract.CoffeeEntry.CONTENT_URI + "0");
         return Uri.parse(lastSavedUri);
+    }
+
+    //returns time value from Shared Preferences of most recent coffee
+    private long getLastAddedCoffeeTime(){
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        return preferences.getLong(LAST_SAVED_TIME, 0);
     }
 
 }//end MainActivity
