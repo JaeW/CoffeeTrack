@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
             Date d = new Date(coffeeTime);
             rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
+            //partial update refreshes value of TextView with most recent coffee time but leaves the
+            //ImageButton - along with its pending intent - unchanged
             appWidgetManager.partiallyUpdateAppWidget(appWidgetId, rv);
         }
     }
