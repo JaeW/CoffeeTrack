@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
@@ -30,15 +29,16 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
     private long coffeeTime;
 
     //called when Widget is added to Host and when widget button is pressed
-    //no automatic periodic update
+    //does not update periodically, only on user button click
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         SharedPreferences pref = context.getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
-        coffeeTime = pref.getLong(LAST_SAVED_TIME, 1234);
+        coffeeTime = pref.getLong(LAST_SAVED_TIME, 0);
 
         ComponentName me = new ComponentName(context, CoffeeWidgetProvider.class);
+        //update all widget instances
         appWidgetManager.updateAppWidget(me, buildUpdate(context, appWidgetIds));
     }
 
@@ -54,21 +54,21 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
         //FLAG_UPDATE_CURRENT ensures extras values are updated each time onUpdate() is called
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //last time coffee consumed is saved in shared preferences; if value empty no time is displayed in widget
+        //last time coffee consumed is saved in shared preferences; if value empty (no records in db)
+        // no time is displayed in widget TextView
         if (coffeeTime != 0) {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
             Date d = new Date(coffeeTime);
             updateViews.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
         }
-
-        //register event handler for widget button
+        //register event handler / pending intent for widget button
         updateViews.setOnClickPendingIntent(R.id.widget_coffee_button, pendingIntent);
 
         return updateViews;
     }
 
     private void addNewCoffee(Context context) {
-        Log.d(TAG, "addNewCoffee: started");
+
         coffeeTime = java.lang.System.currentTimeMillis();
 
         //Save time coffee was consumed to ContentProvider/db
@@ -78,27 +78,22 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
         values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, coffeeTime);
         Uri lastAddedCoffeeUri = context.getContentResolver().insert(CoffeeContract.CoffeeEntry.CONTENT_URI, values);
 
-        //Save last added uri to SharedPreferences
+        //Save last added coffee uri and time to SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(LAST_SAVED, lastAddedCoffeeUri.toString());
+        editor.putLong(LAST_SAVED_TIME, coffeeTime);
         editor.apply();
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive started");
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            Log.d(TAG, "onReceive: extras != null");
-            Boolean isTrue = extras.getBoolean(EXTRA_BUTTON_PRESSED);
-            Log.d(TAG, "onReceive: extra value: " + isTrue);
             if (extras.getBoolean(EXTRA_BUTTON_PRESSED)) {
-                Log.d(TAG, "onReceive: extra button pressed - add new coffee");
                 addNewCoffee(context);
             }
         }
-        Log.d(TAG, "super.onReceive: ");
         super.onReceive(context, intent); //super.onReceive() will immediately call the onUpdate() method
     }
 }

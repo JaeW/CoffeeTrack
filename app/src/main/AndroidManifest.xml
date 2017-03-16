@@ -26,8 +26,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <!-- Broadcast Receiver that processes self-created action -->
-                <!--action android:name="android.appwidget.action.ACTION_WIDGET_RECEIVER"/-->
             </intent-filter>
 
             <meta-data
