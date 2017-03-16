@@ -23,8 +23,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RemoteViews;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -58,7 +62,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     };
 
     private void updateWidget() {
-        //TODO:  implement
+        Context context = getApplicationContext();
+        //retrieve instance of AppWidgetManager responsible for updating widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        // retrieve identifiers for each instance of widget
+        ComponentName thisWidget = new ComponentName(context, CoffeeWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
+        long coffeeTime = getLastAddedCoffeeTime();
+        //update each active widget with time of most recent coffee
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
+            Date d = new Date(coffeeTime);
+            rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
+            appWidgetManager.partiallyUpdateAppWidget(appWidgetId, rv);
+        }
     }
 
     @Override
@@ -102,9 +122,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         /*add a new coffee record to db / content provider
         although this is technically blocking the main UI, due to minimal time required to save non-sql-joined save
          to db / content provider, decision was made to not use a service to perform this add  at this time */
-        long addedCoffeeTime= java.lang.System.currentTimeMillis(); //get current Unix time
+        long addedCoffeeTime = java.lang.System.currentTimeMillis(); //get current Unix time
         ContentValues values = new ContentValues();
-        //TODO:  update with current location coordinates
+        //TODO:  update with current location coordinates in phase 3 app implementation
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LATITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, addedCoffeeTime);
@@ -150,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     //store the uri and time values for the coffee last added to the db & update Shared Preferences
     private void saveLastAddedCoffee(Uri uri, Long lastTime) {
-            SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(LAST_SAVED, uri.toString());
-            editor.putLong(LAST_SAVED_TIME, lastTime);
-            //apply() functions asynchronously as opposed to commit() which does not
-            editor.apply();
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(LAST_SAVED, uri.toString());
+        editor.putLong(LAST_SAVED_TIME, lastTime);
+        //apply() functions asynchronously as opposed to commit() which does not
+        editor.apply();
     }
 
     //returns uri value from Shared Preferences of most recent coffee
@@ -166,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     //returns time value from Shared Preferences of most recent coffee
-    private long getLastAddedCoffeeTime(){
+    private long getLastAddedCoffeeTime() {
         SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getLong(LAST_SAVED_TIME, 0);
     }

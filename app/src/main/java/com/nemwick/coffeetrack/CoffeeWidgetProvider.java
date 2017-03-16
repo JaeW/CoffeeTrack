@@ -30,13 +30,13 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
     private long coffeeTime;
 
     //called when Widget is added to Host and when widget button is pressed
-    //no automatic periodic update
+    //does not update periodically, only on user button click
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         SharedPreferences pref = context.getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
-        coffeeTime = pref.getLong(LAST_SAVED_TIME, 1234);
+        coffeeTime = pref.getLong(LAST_SAVED_TIME, 0);
 
         ComponentName me = new ComponentName(context, CoffeeWidgetProvider.class);
         appWidgetManager.updateAppWidget(me, buildUpdate(context, appWidgetIds));
@@ -82,6 +82,7 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
         SharedPreferences preferences = context.getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(LAST_SAVED, lastAddedCoffeeUri.toString());
+        editor.putLong(LAST_SAVED_TIME, coffeeTime);
         editor.apply();
     }
 
