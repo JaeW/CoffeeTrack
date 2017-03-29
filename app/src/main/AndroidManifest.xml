@@ -41,6 +41,7 @@
 
         <activity
             android:name=".CoffeeStatsActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/activity_coffee_stats_label"/>
     </application>
 
