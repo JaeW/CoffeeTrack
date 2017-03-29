@@ -160,9 +160,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_item_coffee_stats:
-                Intent intent = new Intent(this, CoffeeStatsActivity.class);
+                intent = new Intent(this, CoffeeStatsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_item_start_session:
+                intent = new Intent(this, SessionActivity.class);
                 startActivity(intent);
                 return true;
             default:
