@@ -31,6 +31,7 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
 
         //toolbar setup
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_statistics));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //field - view binding
         dayCupsCoffee = (TextView) findViewById(R.id.cups_today);
