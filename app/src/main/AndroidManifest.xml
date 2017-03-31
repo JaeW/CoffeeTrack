@@ -40,14 +40,17 @@
             android:authorities="com.nemwick.coffeetrack"
             android:exported="false" />
 
+        <receiver android:name=".NotificationReceiver"/>
+
         <activity
             android:name=".CoffeeStatsActivity"
             android:label="@string/activity_coffee_stats_label"
             android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".SessionActivity"
+        <activity
+            android:name=".SessionActivity"
             android:label="@string/timed_session"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
 
     </application>
 

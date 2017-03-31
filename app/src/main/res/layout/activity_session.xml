@@ -55,7 +55,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageButton
-        android:id="@+id/start_pause_button"
+        android:id="@+id/start_session_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="115dp"
@@ -67,7 +67,7 @@
         app:srcCompat="@drawable/ic_play_arrow" />
 
     <ImageButton
-        android:id="@+id/stop_button"
+        android:id="@+id/stop_session_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -75,7 +75,7 @@
         android:layout_marginTop="43dp"
         android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toRightOf="@+id/start_pause_button"
+        app:layout_constraintLeft_toRightOf="@+id/start_session_button"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timer_countdown_view"
         app:srcCompat="@drawable/ic_stop" />
