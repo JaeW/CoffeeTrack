@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String COFFEE_PREFERENCES = "preferenceFile"; //key to retrieve saved preferences file
     public static final String LAST_SAVED = "lastCoffeeSaved"; //key to save/retrieve most recent uri to saved preferences
     public static final String LAST_SAVED_TIME = "lastSavedTime"; //key to save/retrieve time last coffee consumed
+    public static final String SESSION_TIMER_STATE = "sessionTimerState";
     private Uri previousAddedCoffeeUri; //uri value for coffee record 1 prior to most recent
     private long previousAddedCoffeeTime; // time value for coffee record 1 prior to most recent
     private PendingIntent pendingIntent;
@@ -171,7 +172,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        hideOption(R.id.menu_item_stop_session);
+        if(getSessionTimerState()){
+            hideOption(R.id.menu_item_start_session);
+        } else {
+            hideOption(R.id.menu_item_stop_session);
+        }
         return true;
     }
 
@@ -185,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return true;
             case R.id.menu_item_start_session:
                 scheduleNotification();
+                saveSessionTimerState(true);
                 Toast.makeText(this, "Coffee timer set", Toast.LENGTH_SHORT).show();
                 hideOption(R.id.menu_item_start_session);
                 showOption(R.id.menu_item_stop_session);
@@ -193,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 if(alarmManager != null){
                     alarmManager.cancel(pendingIntent);
                 }
+                saveSessionTimerState(false);
                 hideOption(R.id.menu_item_stop_session);
                 showOption(R.id.menu_item_start_session);
                 Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
@@ -243,6 +250,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         long futureInMillis = SystemClock.elapsedRealtime() + duration;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private void saveSessionTimerState(boolean active) {
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SESSION_TIMER_STATE, active);
+        editor.apply();
+    }
+
+    private boolean getSessionTimerState(){
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        return preferences.getBoolean(SESSION_TIMER_STATE, false);
     }
 
     //store the uri and time values for the coffee last added to the db & update Shared Preferences
