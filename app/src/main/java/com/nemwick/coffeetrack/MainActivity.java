@@ -1,5 +1,8 @@
 package com.nemwick.coffeetrack;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -9,14 +12,17 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
@@ -38,8 +45,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String LAST_SAVED_TIME = "lastSavedTime"; //key to save/retrieve time last coffee consumed
     private Uri previousAddedCoffeeUri; //uri value for coffee record 1 prior to most recent
     private long previousAddedCoffeeTime; // time value for coffee record 1 prior to most recent
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
+    private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
+    private PendingIntent alarmIntent;
+    public static final long duration = 30 * 1000;
+    public static final long TWO_HOURS = 2 * 60 * 60 * 1000;
+
+    //TODO:  When NotificationReceiver fires notification, update menu to reflect timer is now inactive
 
     private View.OnClickListener mainClickListener = new View.OnClickListener() {
         @Override
@@ -154,7 +169,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        hideOption(R.id.menu_item_stop_session);
         return true;
     }
 
@@ -167,12 +184,65 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
                 return true;
             case R.id.menu_item_start_session:
-                intent = new Intent(this, SessionActivity.class);
-                startActivity(intent);
+                scheduleNotification();
+                Toast.makeText(this, "Coffee timer set", Toast.LENGTH_SHORT).show();
+                hideOption(R.id.menu_item_start_session);
+                showOption(R.id.menu_item_stop_session);
+                return true;
+            case R.id.menu_item_stop_session:
+                if(alarmManager != null){
+                    alarmManager.cancel(pendingIntent);
+                }
+                hideOption(R.id.menu_item_stop_session);
+                showOption(R.id.menu_item_start_session);
+                Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void hideOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(false);
+    }
+
+    private void showOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(true);
+    }
+
+    private Notification buildAlarmNotification() {
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_stat_maps_local_cafe);
+        builder.setContentTitle("Coffee Track Reminder");
+        builder.setContentText("Time to drink coffee");
+        builder.setAutoCancel(true);
+        builder.setColor(getResources().getColor(R.color.colorAccent));
+
+        Intent intent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        builder.setContentIntent(resultPendingIntent);
+        return builder.build();
+    }
+
+    private void scheduleNotification() {
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, buildAlarmNotification());
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + duration;
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     //store the uri and time values for the coffee last added to the db & update Shared Preferences
@@ -197,5 +267,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getLong(LAST_SAVED_TIME, 0);
     }
+
 
 }//end MainActivity
