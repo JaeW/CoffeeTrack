@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,7 +38,7 @@ import com.nemwick.coffeetrack.data.CoffeeContract;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 111;
     public static final String COFFEE_PREFERENCES = "preferenceFile"; //key to retrieve saved preferences file
@@ -181,6 +182,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
@@ -192,16 +207,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 scheduleNotification();
                 saveSessionTimerState(true);
                 Toast.makeText(this, "Coffee timer set", Toast.LENGTH_SHORT).show();
-                hideOption(R.id.menu_item_start_session);
-                showOption(R.id.menu_item_stop_session);
+                setSessionButtonVisibility();
                 return true;
             case R.id.menu_item_stop_session:
                 if(alarmManager != null){
                     alarmManager.cancel(pendingIntent);
                 }
                 saveSessionTimerState(false);
-                hideOption(R.id.menu_item_stop_session);
-                showOption(R.id.menu_item_start_session);
+                setSessionButtonVisibility();
                 Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -288,4 +301,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        switch (key) {
+            case SESSION_TIMER_STATE:
+                setSessionButtonVisibility();
+        }
+    }
+
+    private void setSessionButtonVisibility() {
+        if (getSessionTimerState()){
+            showOption(R.id.menu_item_stop_session);
+            hideOption(R.id.menu_item_start_session);
+        } else{
+            showOption(R.id.menu_item_start_session);
+            hideOption(R.id.menu_item_stop_session);
+        }
+    }
 }//end MainActivity
