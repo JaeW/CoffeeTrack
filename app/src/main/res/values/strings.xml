@@ -8,4 +8,7 @@
     <string name="statistics_today">Today</string>
     <string name="statistics_this_month">This Month</string>
     <string name="last_coffee_was">Last coffee:</string>
+    <string name="timer_session">Timer Session</string>
+    <string name="coffee_stats">Coffee Stats</string>
+    <string name="timed_session">Timed Session</string>
 </resources>
