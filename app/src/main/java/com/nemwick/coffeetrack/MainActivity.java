@@ -13,7 +13,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -52,11 +51,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
-    private PendingIntent alarmIntent;
     public static final long duration = 30 * 1000;
     public static final long TWO_HOURS = 2 * 60 * 60 * 1000;
 
-    //TODO:  When NotificationReceiver fires notification, update menu to reflect timer is now inactive
 
     private View.OnClickListener mainClickListener = new View.OnClickListener() {
         @Override
@@ -78,28 +75,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     };
 
-    private void updateWidget() {
-        Context context = getApplicationContext();
-        //retrieve instance of AppWidgetManager responsible for updating widget
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-        // retrieve identifiers for each instance of widget
-        ComponentName thisWidget = new ComponentName(context, CoffeeWidgetProvider.class);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-
-        long coffeeTime = getLastAddedCoffeeTime();
-        //update each active widget with time of most recent coffee
-        for (int appWidgetId : appWidgetIds) {
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
-            Date d = new Date(coffeeTime);
-            rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
-            //partial update refreshes value of TextView with most recent coffee time but leaves the
-            //ImageButton - along with its pending intent - unchanged
-            appWidgetManager.partiallyUpdateAppWidget(appWidgetId, rv);
-        }
-    }
-
+    //Overridden Callback Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +107,110 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    //Overridden Menu Methods
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (getSessionTimerState()) {
+            hideOption(R.id.menu_item_start_session);
+        } else {
+            hideOption(R.id.menu_item_stop_session);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.menu_item_coffee_stats:
+                intent = new Intent(this, CoffeeStatsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_item_start_session:
+                scheduleNotification();
+                saveSessionTimerState(true);
+                Toast.makeText(this, "Coffee timer set", Toast.LENGTH_SHORT).show();
+                setSessionButtonVisibility();
+                return true;
+            case R.id.menu_item_stop_session:
+                if (alarmManager != null) {
+                    alarmManager.cancel(pendingIntent);
+                }
+                saveSessionTimerState(false);
+                setSessionButtonVisibility();
+                Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //Overridden Loader Methods
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String sortOrder = CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " DESC";
+        return new CursorLoader(this, CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.setCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.setCursor(null);
+    }
+
+    //Overridden Preferences Changed Method
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        switch (key) {
+            case SESSION_TIMER_STATE:
+                setSessionButtonVisibility();
+        }
+    }
+
+
+    private void updateWidget() {
+        Context context = getApplicationContext();
+        //retrieve instance of AppWidgetManager responsible for updating widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        // retrieve identifiers for each instance of widget
+        ComponentName thisWidget = new ComponentName(context, CoffeeWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
+        long coffeeTime = getLastAddedCoffeeTime();
+        //update each active widget with time of most recent coffee
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
+            Date d = new Date(coffeeTime);
+            rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
+            //partial update refreshes value of TextView with most recent coffee time but leaves the
+            //ImageButton - along with its pending intent - unchanged
+            appWidgetManager.partiallyUpdateAppWidget(appWidgetId, rv);
+        }
+    }
+
     private void addNewCoffee() {
         /* retrieve uri and time values for most recent coffee from shared preferences
         and save locally in the event the undo feature is clicked on the snackbar and
@@ -153,85 +233,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         saveLastAddedCoffee(lastAddedCoffeeUri, addedCoffeeTime);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " DESC";
-        return new CursorLoader(this, CoffeeContract.CoffeeEntry.CONTENT_URI, null, null, null, sortOrder);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.setCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.setCursor(null);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        if(getSessionTimerState()){
-            hideOption(R.id.menu_item_start_session);
-        } else {
-            hideOption(R.id.menu_item_stop_session);
-        }
-        return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
-        preferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch (item.getItemId()) {
-            case R.id.menu_item_coffee_stats:
-                intent = new Intent(this, CoffeeStatsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_item_start_session:
-                scheduleNotification();
-                saveSessionTimerState(true);
-                Toast.makeText(this, "Coffee timer set", Toast.LENGTH_SHORT).show();
-                setSessionButtonVisibility();
-                return true;
-            case R.id.menu_item_stop_session:
-                if(alarmManager != null){
-                    alarmManager.cancel(pendingIntent);
-                }
-                saveSessionTimerState(false);
-                setSessionButtonVisibility();
-                Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void hideOption(int id) {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(false);
-    }
-
-    private void showOption(int id) {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(true);
-    }
-
     private Notification buildAlarmNotification() {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -251,7 +252,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         builder.setContentIntent(resultPendingIntent);
-        return builder.build();
+        Notification notification = builder.build();
+        notification.defaults = Notification.DEFAULT_SOUND;
+        return notification;
     }
 
     private void scheduleNotification() {
@@ -272,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         editor.apply();
     }
 
-    private boolean getSessionTimerState(){
+    private boolean getSessionTimerState() {
         SharedPreferences preferences = getSharedPreferences(COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getBoolean(SESSION_TIMER_STATE, false);
     }
@@ -300,23 +303,25 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return preferences.getLong(LAST_SAVED_TIME, 0);
     }
 
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        switch (key) {
-            case SESSION_TIMER_STATE:
-                setSessionButtonVisibility();
-        }
-    }
-
+    //Methods to show/hide session-related buttons dependent on AlarmManager state
     private void setSessionButtonVisibility() {
-        if (getSessionTimerState()){
+        if (getSessionTimerState()) {
             showOption(R.id.menu_item_stop_session);
             hideOption(R.id.menu_item_start_session);
-        } else{
+        } else {
             showOption(R.id.menu_item_start_session);
             hideOption(R.id.menu_item_stop_session);
         }
     }
+
+    private void hideOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(false);
+    }
+
+    private void showOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(true);
+    }
+
 }//end MainActivity
