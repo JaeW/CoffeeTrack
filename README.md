@@ -14,9 +14,8 @@ widget will display the last time a cup was consumed along with a button to add 
 provides option to view coffee consumption for the past day, week and month in new activity.  [Completed 2017 March 15]
 
 2.  Addition of a session concept - where a session (study, work, whatever) can be started when the first cup of coffee is consumed.
-thereafter the user will be reminded at regular, periodic intervals to have another cup.  This keeps the user from drinking too much 
-(and turning into a stress monkey) or too little (falling asleep on the keyboard).  Implementation will involve notifications;
-optionally notifications utilizing the direct reply option accessible on the lock screen.  
+thereafter the user will be reminded in two hours to have another cup.  This keeps the user from drinking too much 
+(and turning into a stress monkey) or too little (falling asleep on the keyboard).  Implementation will involve Notifications and AlarmManager.  [Completed 2017 March 31]
 
 3.  When notifications from phase 2 implementation appear, user is offered option of finding coffee shops closest to his/her current
 location.  
