@@ -11,4 +11,6 @@
     <string name="timer_session">Timer Session</string>
     <string name="coffee_stats">Coffee Stats</string>
     <string name="timed_session">Timed Session</string>
+    <string name="find_coffee">Find Coffee</string>
+    <string name="attribution">Attribution</string>
 </resources>
