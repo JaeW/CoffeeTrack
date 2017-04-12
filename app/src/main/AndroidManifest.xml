@@ -57,7 +57,10 @@
             android:name=".CoffeeStatsActivity"
             android:label="@string/activity_coffee_stats_label"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".CoffeePickerActivity"></activity>
+
+        <activity android:name=".CoffeePickerActivity"
+            android:label="Find Coffee Nearby"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.nemwick.coffeetrack.CoffeePickerActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_picker"
+        style="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/toolbar_elevation"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
 
     <Button
         android:id="@+id/find_coffee_shop"
