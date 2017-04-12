@@ -19,4 +19,8 @@
         android:icon="@drawable/ic_alarm_off"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/menu_item_find_coffee"
+        android:title="Find Coffee"
+        app:showAsAction="never"/>
+
 </menu>

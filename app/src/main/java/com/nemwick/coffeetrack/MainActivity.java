@@ -156,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 setSessionButtonVisibility();
                 Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.menu_item_find_coffee:
+                intent = new Intent(this, CoffeePickerActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

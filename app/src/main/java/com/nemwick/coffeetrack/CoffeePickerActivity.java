@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class CoffeePickerActivity extends AppCompatActivity {
@@ -35,7 +36,6 @@ public class CoffeePickerActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,22 @@ public class CoffeePickerActivity extends AppCompatActivity {
 
         //set onClickListener on findCoffee button
         findCoffeeBtn.setOnClickListener(findCoffeeClickListener);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
 
+            Place place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
+            coffeeShopName.setText(place.getName());
+            coffeeShopAddy.setText(place.getAddress());
+
+            if (place.getAttributions() == null) {
+                attribution.loadData("no attribution", "text/html; charset=utf-8", "UFT-8" );
+            } else{
+                attribution.loadData(place.getAttributions().toString(), "text/html; charset=utf-8", "UFT-8");
+            }
+        }
     }
 }
