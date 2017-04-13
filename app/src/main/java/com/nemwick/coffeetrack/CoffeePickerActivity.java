@@ -3,10 +3,12 @@ package com.nemwick.coffeetrack;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,6 +36,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
     private TextView coffeeShopPhone;
     private TextView coffeeShopWebsite;
     private WebView attribution;
+    private Place place;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -54,10 +57,15 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     //TODO:  launch google Map navigation
                     return;
                 case R.id.phone_button:
-                    //TODO;  dial phone number
+                    if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
+                            Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + place.getPhoneNumber()));
+                        startActivity(intent);
+                    }
                     return;
                 case R.id.website_button:
-                    //TODO:  view website
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(place.getWebsiteUri())));
+                    startActivity(intent);
                     return;
             }
         }
@@ -92,9 +100,11 @@ public class CoffeePickerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
 
-            Place place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
+            place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
             coffeeShopName.setText(place.getName());
             coffeeShopAddy.setText(place.getAddress());
+            coffeeShopPhone.setText(place.getPhoneNumber());
+            coffeeShopWebsite.setText(place.getWebsiteUri().toString());
 
             if (place.getAttributions() == null) {
                 attribution.loadData("no attribution", "text/html; charset=utf-8", "UFT-8");
