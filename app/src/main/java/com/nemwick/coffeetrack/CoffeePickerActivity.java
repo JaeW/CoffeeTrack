@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,22 +25,40 @@ public class CoffeePickerActivity extends AppCompatActivity {
 
     private static final int PLACE_PICKER_REQUEST = 1;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
-    private Button findCoffeeBtn;
+    private Button findCoffeeButton;
+    private ImageButton locationButton;
+    private ImageButton phoneButton;
+    private ImageButton websiteButton;
     private TextView coffeeShopName;
     private TextView coffeeShopAddy;
+    private TextView coffeeShopPhone;
+    private TextView coffeeShopWebsite;
     private WebView attribution;
 
-    private View.OnClickListener findCoffeeClickListener = new View.OnClickListener() {
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-            try {
-                Intent intent = builder.build(CoffeePickerActivity.this);
-                startActivityForResult(intent, PLACE_PICKER_REQUEST);
-            } catch (GooglePlayServicesRepairableException e) {
-                e.printStackTrace();
-            } catch (GooglePlayServicesNotAvailableException e) {
-                e.printStackTrace();
+            switch (v.getId()) {
+                case R.id.find_coffee_shop:
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    try {
+                        Intent intent = builder.build(CoffeePickerActivity.this);
+                        startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                case R.id.location_button:
+                    //TODO:  launch google Map navigation
+                    return;
+                case R.id.phone_button:
+                    //TODO;  dial phone number
+                    return;
+                case R.id.website_button:
+                    //TODO:  view website
+                    return;
             }
         }
     };
@@ -51,13 +70,21 @@ public class CoffeePickerActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_picker));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        findCoffeeBtn = (Button) findViewById(R.id.find_coffee_shop);
+        findCoffeeButton = (Button) findViewById(R.id.find_coffee_shop);
+        locationButton = (ImageButton) findViewById(R.id.location_button);
+        phoneButton = (ImageButton) findViewById(R.id.phone_button);
+        websiteButton = (ImageButton) findViewById(R.id.website_button);
         coffeeShopName = (TextView) findViewById(R.id.coffee_shop_name);
         coffeeShopAddy = (TextView) findViewById(R.id.coffee_shop_addy);
+        coffeeShopPhone = (TextView) findViewById(R.id.coffee_shop_phone);
+        coffeeShopWebsite = (TextView) findViewById(R.id.coffee_shop_website);
         attribution = (WebView) findViewById(R.id.attributions);
 
-        //set onClickListener on findCoffee button
-        findCoffeeBtn.setOnClickListener(findCoffeeClickListener);
+        //set onClickListener on buttons
+        findCoffeeButton.setOnClickListener(onClickListener);
+        locationButton.setOnClickListener(onClickListener);
+        phoneButton.setOnClickListener(onClickListener);
+        websiteButton.setOnClickListener(onClickListener);
     }
 
     @Override

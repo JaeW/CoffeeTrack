@@ -23,40 +23,63 @@
         android:id="@+id/find_coffee_shop"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="@string/find_coffee"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:text="@string/find_coffee" />
 
     <TextView
         android:id="@+id/coffee_shop_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textSize="24dp"
         android:layout_below="@id/find_coffee_shop"
         android:layout_centerHorizontal="true"
-        android:text="Location Name" />
+        android:layout_marginTop="32dp"
+        android:text="Location Name"
+        android:textSize="24sp" />
 
     <ImageButton
         android:id="@+id/location_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/picker_details_image_buttons"
         android:layout_below="@id/coffee_shop_name"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@null"
+        android:contentDescription="@string/location_icon_button"
         app:srcCompat="@drawable/ic_location_accent_24dp" />
 
     <TextView
         android:id="@+id/coffee_shop_addy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/picker_detail_text_views"
         android:layout_below="@id/coffee_shop_name"
+        android:layout_toEndOf="@id/location_button"
         android:layout_toRightOf="@id/location_button"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="32dp"
-        android:text="TextView"
-        android:textSize="16sp" />
+        android:text="Location Addy" />
+
+    <ImageButton
+        android:id="@+id/phone_button"
+        style="@style/picker_details_image_buttons"
+        android:layout_below="@id/coffee_shop_addy"
+        android:contentDescription="@string/phone_icon_button"
+        app:srcCompat="@drawable/ic_phone_accent_24dp" />
+
+    <TextView
+        android:id="@+id/coffee_shop_phone"
+        style="@style/picker_detail_text_views"
+        android:layout_below="@id/coffee_shop_addy"
+        android:layout_toEndOf="@id/phone_button"
+        android:layout_toRightOf="@id/phone_button"
+        android:text="Location Phone" />
+
+    <ImageButton
+        android:id="@+id/website_button"
+        style="@style/picker_details_image_buttons"
+        android:layout_below="@id/coffee_shop_phone"
+        android:contentDescription="@string/website_icon_button"
+        app:srcCompat="@drawable/ic_language_accent_24dp" />
+
+    <TextView
+        android:id="@+id/coffee_shop_website"
+        style="@style/picker_detail_text_views"
+        android:layout_below="@id/coffee_shop_phone"
+        android:layout_toEndOf="@id/website_button"
+        android:layout_toRightOf="@id/website_button"
+        android:text="Location Website" />
 
     <WebView
         android:id="@+id/attributions"
@@ -68,9 +91,5 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:visibility="visible"
- />
-
-
-
+        android:visibility="visible" />
 </RelativeLayout>

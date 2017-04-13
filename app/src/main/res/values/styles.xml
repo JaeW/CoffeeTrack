@@ -13,4 +13,20 @@
         <item name="android:popupBackground">@color/colorPrimaryLight</item>
     </style>
 
+    <style name="picker_detail_text_views">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">32dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="picker_details_image_buttons">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>
