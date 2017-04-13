@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:text="@string/last_coffee_was"/>
 
         <TextView
@@ -35,8 +36,11 @@
     <ImageButton
         android:id="@+id/widget_coffee_button"
         android:layout_width="0dp"
+        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/coffee_cup_button"
         android:src="@drawable/ic_coffee_outline"
+        android:background="@null"
         android:layout_weight="1" />
 
 </LinearLayout>
