@@ -54,18 +54,25 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     }
                     return;
                 case R.id.location_button:
-                    //TODO:  launch google Map navigation
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(place.getAddress().toString()));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
                     return;
                 case R.id.phone_button:
-                    if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
-                            Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + place.getPhoneNumber()));
-                        startActivity(intent);
+                    if (place.getPhoneNumber() != null) {
+                        if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
+                                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + place.getPhoneNumber()));
+                            startActivity(intent);
+                        }
                     }
                     return;
                 case R.id.website_button:
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(place.getWebsiteUri())));
-                    startActivity(intent);
+                    if (place.getWebsiteUri() != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(place.getWebsiteUri())));
+                        startActivity(intent);
+                    }
                     return;
             }
         }
@@ -100,11 +107,16 @@ public class CoffeePickerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
 
-            place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
-            coffeeShopName.setText(place.getName());
-            coffeeShopAddy.setText(place.getAddress());
-            coffeeShopPhone.setText(place.getPhoneNumber());
-            coffeeShopWebsite.setText(place.getWebsiteUri().toString());
+            try {
+                place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
+                coffeeShopName.setText(place.getName());
+                coffeeShopAddy.setText(place.getAddress());
+                coffeeShopPhone.setText(place.getPhoneNumber());
+                coffeeShopWebsite.setText(place.getWebsiteUri().toString());
+            } catch (Exception e) {
+                // This will catch any exception, because they are all descended from Exception
+                System.out.println("Error " + e.getMessage());
+            }
 
             if (place.getAttributions() == null) {
                 attribution.loadData("no attribution", "text/html; charset=utf-8", "UFT-8");
