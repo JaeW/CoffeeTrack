@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
         pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + duration;
+        long futureInMillis = SystemClock.elapsedRealtime() + TWO_HOURS;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
