@@ -33,7 +33,6 @@
         android:layout_below="@id/find_coffee_shop"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:text="Location Name"
         android:textSize="24sp" />
 
     <ImageButton
@@ -41,6 +40,7 @@
         style="@style/picker_details_image_buttons"
         android:layout_below="@id/coffee_shop_name"
         android:contentDescription="@string/location_icon_button"
+        android:visibility="invisible"
         app:srcCompat="@drawable/ic_location_accent_24dp" />
 
     <TextView
@@ -48,14 +48,14 @@
         style="@style/picker_detail_text_views"
         android:layout_below="@id/coffee_shop_name"
         android:layout_toEndOf="@id/location_button"
-        android:layout_toRightOf="@id/location_button"
-        android:text="Location Addy" />
+        android:layout_toRightOf="@id/location_button"/>
 
     <ImageButton
         android:id="@+id/phone_button"
         style="@style/picker_details_image_buttons"
         android:layout_below="@id/coffee_shop_addy"
         android:contentDescription="@string/phone_icon_button"
+        android:visibility="invisible"
         app:srcCompat="@drawable/ic_phone_accent_24dp" />
 
     <TextView
@@ -63,14 +63,14 @@
         style="@style/picker_detail_text_views"
         android:layout_below="@id/coffee_shop_addy"
         android:layout_toEndOf="@id/phone_button"
-        android:layout_toRightOf="@id/phone_button"
-        android:text="Location Phone" />
+        android:layout_toRightOf="@id/phone_button" />
 
     <ImageButton
         android:id="@+id/website_button"
         style="@style/picker_details_image_buttons"
         android:layout_below="@id/coffee_shop_phone"
         android:contentDescription="@string/website_icon_button"
+        android:visibility="invisible"
         app:srcCompat="@drawable/ic_language_accent_24dp" />
 
     <TextView
@@ -78,8 +78,7 @@
         style="@style/picker_detail_text_views"
         android:layout_below="@id/coffee_shop_phone"
         android:layout_toEndOf="@id/website_button"
-        android:layout_toRightOf="@id/website_button"
-        android:text="Location Website" />
+        android:layout_toRightOf="@id/website_button" />
 
     <WebView
         android:id="@+id/attributions"

@@ -61,6 +61,7 @@
 
         <activity android:name=".CoffeePickerActivity"
             android:label="Find Coffee Nearby"
+            android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity"/>
     </application>
 

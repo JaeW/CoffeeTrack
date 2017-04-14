@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
-    public static final long duration = 30 * 1000;
+    public static final long duration = 30 * 1000; //TODO:  temporary variable for testing - delete when final
     public static final long TWO_HOURS = 2 * 60 * 60 * 1000;
 
 
@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
          to db / content provider, decision was made to not use a service to perform this add  at this time */
         long addedCoffeeTime = java.lang.System.currentTimeMillis(); //get current Unix time
         ContentValues values = new ContentValues();
-        //TODO:  update with current location coordinates in phase 3 app implementation
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LATITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_LONGITUDE, 1);
         values.put(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME, addedCoffeeTime);
@@ -246,9 +245,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         builder.setAutoCancel(true);
         builder.setColor(getResources().getColor(R.color.colorAccent));
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, CoffeePickerActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(CoffeePickerActivity.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
@@ -267,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
         pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + TWO_HOURS;
+        long futureInMillis = SystemClock.elapsedRealtime() + duration;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }

@@ -52,13 +52,15 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     } catch (GooglePlayServicesNotAvailableException e) {
                         e.printStackTrace();
                     }
-                    return;
+                    break;
                 case R.id.location_button:
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(place.getAddress().toString()));
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                    return;
+                    if (place.getAddress() != null) {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(place.getAddress().toString()));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                    }
+                    break;
                 case R.id.phone_button:
                     if (place.getPhoneNumber() != null) {
                         if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
@@ -67,13 +69,13 @@ public class CoffeePickerActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }
-                    return;
+                    break;
                 case R.id.website_button:
                     if (place.getWebsiteUri() != null) {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(place.getWebsiteUri())));
                         startActivity(intent);
                     }
-                    return;
+                    break;
             }
         }
     };
@@ -82,9 +84,11 @@ public class CoffeePickerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_picker);
+        //set toolbar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_picker));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //initialize UI views
         findCoffeeButton = (Button) findViewById(R.id.find_coffee_shop);
         locationButton = (ImageButton) findViewById(R.id.location_button);
         phoneButton = (ImageButton) findViewById(R.id.phone_button);
@@ -100,6 +104,8 @@ public class CoffeePickerActivity extends AppCompatActivity {
         locationButton.setOnClickListener(onClickListener);
         phoneButton.setOnClickListener(onClickListener);
         websiteButton.setOnClickListener(onClickListener);
+
+        requestPermission();
     }
 
     @Override
@@ -108,14 +114,20 @@ public class CoffeePickerActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
 
             try {
+                //get place object from user's choice in PlacePicker
                 place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
+                //show hidden imagebuttons
+                locationButton.setVisibility(View.VISIBLE);
+                phoneButton.setVisibility(View.VISIBLE);
+                websiteButton.setVisibility(View.VISIBLE);
+                //populate textviews with data from PlacePicker result
                 coffeeShopName.setText(place.getName());
                 coffeeShopAddy.setText(place.getAddress());
                 coffeeShopPhone.setText(place.getPhoneNumber());
                 coffeeShopWebsite.setText(place.getWebsiteUri().toString());
             } catch (Exception e) {
-                // This will catch any exception, because they are all descended from Exception
                 System.out.println("Error " + e.getMessage());
+                e.printStackTrace();
             }
 
             if (place.getAttributions() == null) {
@@ -148,6 +160,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
                 }
                 break;
         }
+
     }
 
 }
