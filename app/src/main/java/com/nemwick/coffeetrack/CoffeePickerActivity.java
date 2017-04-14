@@ -27,6 +27,8 @@ public class CoffeePickerActivity extends AppCompatActivity {
 
     private static final int PLACE_PICKER_REQUEST = 1;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
+    private static final int MY_PERMISSION_CALL_PHONE = 102;
+    public static final int MY_PERMISSION_INTERNET = 103;
     private Button findCoffeeButton;
     private ImageButton locationButton;
     private ImageButton phoneButton;
@@ -62,6 +64,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.phone_button:
+                    requestPhonePermission();
                     if (place.getPhoneNumber() != null) {
                         if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
                                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
@@ -105,7 +108,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
         phoneButton.setOnClickListener(onClickListener);
         websiteButton.setOnClickListener(onClickListener);
 
-        requestPermission();
+        requestLocationPermission();
     }
 
     @Override
@@ -138,12 +141,20 @@ public class CoffeePickerActivity extends AppCompatActivity {
         }
     }
 
-    private void requestPermission() {
+    private void requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSION_FINE_LOCATION);
+            }
+        }
+    }
+
+    private void requestPhonePermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, MY_PERMISSION_CALL_PHONE);
             }
         }
     }
