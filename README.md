@@ -18,4 +18,6 @@ thereafter the user will be reminded in two hours to have another cup.  This kee
 (and turning into a stress monkey) or too little (falling asleep on the keyboard).  Implementation will involve Notifications and AlarmManager.  [Completed 2017 March 31]
 
 3.  When notifications from phase 2 implementation appear, user is offered option of finding coffee shops closest to his/her current
-location.  
+location.  [Completed 2017 April 13]
+
+4.  Bonus Phase:  Make it Pretty!  Apply Material Design principles.  Add images. And other things.  
