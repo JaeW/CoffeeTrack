@@ -121,7 +121,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
 
     private void initBackgroundImage() {
         Glide
-                .with(this).load(R.drawable.coffee_picker)
+                .with(this).load(R.drawable.coffee_pour)
                 .into(imageView);
     }
 

@@ -1,6 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="row_holder_top_bottom_padding">10dp</dimen>
+    <dimen name="row_holder_top_bottom_padding">8dp</dimen>
     <dimen name="fab_layout_margin">16dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="widget_top_bottom_padding">4dp</dimen>
@@ -9,4 +9,5 @@
     <dimen name="widget_min_width">120dp</dimen>
     <!-- android recommended for 1 cell -->
     <dimen name="widget_min_height">40dp</dimen>
+    <dimen name="row_holder_right_left_padding">16dp</dimen>
 </resources>

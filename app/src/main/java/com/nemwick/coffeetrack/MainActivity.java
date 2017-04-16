@@ -29,9 +29,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private long previousAddedCoffeeTime; // time value for coffee record 1 prior to most recent
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
+    private ImageView imageView;
     private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
@@ -80,6 +83,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //load image in ImageView
+        imageView = (ImageView) findViewById(R.id.coffee_main_backdrop);
+        Glide.with(this).load(R.drawable.coffee_main).into(imageView);
+
 
         //toolbar setup
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);

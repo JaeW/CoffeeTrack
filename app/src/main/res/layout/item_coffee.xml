@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/row_holder_top_bottom_padding"
-    android:paddingTop="@dimen/row_holder_top_bottom_padding">
-    
+    android:paddingTop="@dimen/row_holder_top_bottom_padding"
+    android:paddingLeft="@dimen/row_holder_right_left_padding"
+    android:paddingRight="@dimen/row_holder_right_left_padding">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_ev_station_24dp"/>
+
     <TextView
         android:id="@+id/last_coffee_time"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_marginLeft="32dp"
+        android:layout_weight="1"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp" />
 
 </LinearLayout>
