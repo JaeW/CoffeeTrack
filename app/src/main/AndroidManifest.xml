@@ -29,7 +29,6 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -57,12 +56,22 @@
         <activity
             android:name=".CoffeeStatsActivity"
             android:label="@string/activity_coffee_stats_label"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
-        <activity android:name=".CoffeePickerActivity"
+        <activity
+            android:name=".CoffeePickerActivity"
             android:label="Find Coffee Nearby"
             android:launchMode="singleInstance"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

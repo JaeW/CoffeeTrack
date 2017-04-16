@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -29,7 +32,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
     private static final int MY_PERMISSION_CALL_PHONE = 102;
     public static final int MY_PERMISSION_INTERNET = 103;
-    private Button findCoffeeButton;
+    private FloatingActionButton findCoffeeButton;
     private ImageButton locationButton;
     private ImageButton phoneButton;
     private ImageButton websiteButton;
@@ -38,6 +41,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
     private TextView coffeeShopPhone;
     private TextView coffeeShopWebsite;
     private WebView attribution;
+    private ImageView imageView;
     private Place place;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -91,8 +95,12 @@ public class CoffeePickerActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_picker));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        imageView = (ImageView) findViewById(R.id.picker_coffee_image);
+        initBackgroundImage();
+
+
         //initialize UI views
-        findCoffeeButton = (Button) findViewById(R.id.find_coffee_shop);
+        findCoffeeButton = (FloatingActionButton) findViewById(R.id.find_coffee_shop);
         locationButton = (ImageButton) findViewById(R.id.location_button);
         phoneButton = (ImageButton) findViewById(R.id.phone_button);
         websiteButton = (ImageButton) findViewById(R.id.website_button);
@@ -109,6 +117,12 @@ public class CoffeePickerActivity extends AppCompatActivity {
         websiteButton.setOnClickListener(onClickListener);
 
         requestLocationPermission();
+    }
+
+    private void initBackgroundImage() {
+        Glide
+                .with(this).load(R.drawable.coffee_picker)
+                .into(imageView);
     }
 
     @Override
@@ -151,8 +165,8 @@ public class CoffeePickerActivity extends AppCompatActivity {
         }
     }
 
-    private void requestPhonePermission(){
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+    private void requestPhonePermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, MY_PERMISSION_CALL_PHONE);
             }
