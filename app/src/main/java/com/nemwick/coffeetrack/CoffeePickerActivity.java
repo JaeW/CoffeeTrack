@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +31,9 @@ public class CoffeePickerActivity extends AppCompatActivity {
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
     private static final int MY_PERMISSION_CALL_PHONE = 102;
     public static final int MY_PERMISSION_INTERNET = 103;
+    private static final String STATE_ADDY = "coffeeAddress";
+    private static final String STATE_PHONE = "coffeePhone";
+    private static final java.lang.String STATE_WEBSITE = "coffeeWebsite";
     private FloatingActionButton findCoffeeButton;
     private ImageButton locationButton;
     private ImageButton phoneButton;
@@ -49,6 +51,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.find_coffee_shop:
+                    //launch PlacePicker which allows user to choose from list of places nearby
                     PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     try {
                         Intent intent = builder.build(CoffeePickerActivity.this);
@@ -60,26 +63,29 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.location_button:
-                    if (place.getAddress() != null) {
-                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(place.getAddress().toString()));
+                    //navigation/directions to address obtained from PlacePicker
+                    if (coffeeShopAddy.getText() != null) {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(coffeeShopAddy.getText().toString()));
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
                         startActivity(mapIntent);
                     }
                     break;
                 case R.id.phone_button:
+                    //call establishment obtained from PlacePicker
                     requestPhonePermission();
-                    if (place.getPhoneNumber() != null) {
+                    if (coffeeShopPhone.getText() != null) {
                         if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
                                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + place.getPhoneNumber()));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + coffeeShopPhone.getText()));
                             startActivity(intent);
                         }
                     }
                     break;
                 case R.id.website_button:
-                    if (place.getWebsiteUri() != null) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(place.getWebsiteUri())));
+                    //visit website of establishment obtained from PlacePicker
+                    if (coffeeShopWebsite.getText() != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(coffeeShopWebsite.getText().toString())));
                         startActivity(intent);
                     }
                     break;
@@ -95,9 +101,9 @@ public class CoffeePickerActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_picker));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //load coffee image
         imageView = (ImageView) findViewById(R.id.picker_coffee_image);
         initBackgroundImage();
-
 
         //initialize UI views
         findCoffeeButton = (FloatingActionButton) findViewById(R.id.find_coffee_shop);
@@ -116,20 +122,33 @@ public class CoffeePickerActivity extends AppCompatActivity {
         phoneButton.setOnClickListener(onClickListener);
         websiteButton.setOnClickListener(onClickListener);
 
+        //check to see if user has granted location permission
         requestLocationPermission();
     }
 
-    private void initBackgroundImage() {
-        Glide
-                .with(this).load(R.drawable.coffee_pour)
-                .into(imageView);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_ADDY, coffeeShopAddy.getText().toString());
+        outState.putString(STATE_PHONE, coffeeShopPhone.getText().toString());
+        outState.putString(STATE_WEBSITE, coffeeShopWebsite.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        coffeeShopAddy.setText(savedInstanceState.getString(STATE_ADDY));
+        coffeeShopPhone.setText(savedInstanceState.getString(STATE_PHONE));
+        coffeeShopWebsite.setText(savedInstanceState.getString(STATE_WEBSITE));
+        locationButton.setVisibility(View.VISIBLE);
+        phoneButton.setVisibility(View.VISIBLE);
+        websiteButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
-
             try {
                 //get place object from user's choice in PlacePicker
                 place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
@@ -155,7 +174,15 @@ public class CoffeePickerActivity extends AppCompatActivity {
         }
     }
 
+    private void initBackgroundImage() {
+        //use Glide jar to load coffee image
+        Glide
+                .with(this).load(R.drawable.coffee_pour)
+                .into(imageView);
+    }
+
     private void requestLocationPermission() {
+        //if SDK >= 23 (Marshmallow) and user has not granted location permission, request it
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -185,7 +212,5 @@ public class CoffeePickerActivity extends AppCompatActivity {
                 }
                 break;
         }
-
     }
-
 }
