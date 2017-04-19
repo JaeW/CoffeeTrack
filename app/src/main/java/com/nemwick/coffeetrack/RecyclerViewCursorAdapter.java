@@ -1,5 +1,6 @@
 package com.nemwick.coffeetrack;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerViewCursorAdapter.CoffeeHolder> {
     private Cursor coffeeCursor;
+    private Context context;
 
     public RecyclerViewCursorAdapter() {
         //intentionally left blank
@@ -23,6 +26,7 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public CoffeeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(context == null) {context = parent.getContext();}
         View coffeeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_coffee, parent, false);
         return new CoffeeHolder(coffeeView);
     }
@@ -32,7 +36,8 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
         coffeeCursor.moveToPosition(position);
         Long coffeeTime = coffeeCursor.getLong(coffeeCursor.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
         Date dateObjectCoffee = new Date(coffeeTime);
-        holder.tvCoffeeTime.setText(formatDateTime(dateObjectCoffee));
+        holder.tvCoffeeTime.setText(formatTime(dateObjectCoffee));
+        holder.tvCoffeeDate.setText(formatDate(dateObjectCoffee));
     }
 
     @Override
@@ -60,12 +65,25 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
         return dateFormat.format(dateObject);
     }
 
+    private String formatDate(Date dateObject) {
+        DateFormat df = android.text.format.DateFormat.getDateFormat(context);
+        return df.format(dateObject);
+    }
+
+    private String formatTime(Date dateObject) {
+        DateFormat df = android.text.format.DateFormat.getTimeFormat(context);
+        return df.format(dateObject);
+    }
+
+
     public static class CoffeeHolder extends RecyclerView.ViewHolder {
         public TextView tvCoffeeTime;
+        public TextView tvCoffeeDate;
 
         public CoffeeHolder(View itemView) {
             super(itemView);
             tvCoffeeTime = (TextView) itemView.findViewById(R.id.last_coffee_time);
+            tvCoffeeDate = (TextView) itemView.findViewById(R.id.last_coffee_date);
         }
     }
 }

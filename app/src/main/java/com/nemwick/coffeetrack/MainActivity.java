@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private long previousAddedCoffeeTime; // time value for coffee record 1 prior to most recent
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
-    private ImageView imageView;
     private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
@@ -85,9 +85,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setContentView(R.layout.activity_main);
 
         //load image in ImageView
-        imageView = (ImageView) findViewById(R.id.coffee_main_backdrop);
+        ImageView imageView = (ImageView) findViewById(R.id.coffee_main_backdrop);
         Glide.with(this).load(R.drawable.coffee_main).into(imageView);
-
 
         //toolbar setup
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
@@ -147,16 +146,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_item_coffee_stats:
+                //view coffee consumption statistics for last month in new activity
                 intent = new Intent(this, CoffeeStatsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_item_start_session:
+                //start timer session - launches alarm & notification
                 scheduleNotification();
                 saveSessionTimerState(true);
                 Toast.makeText(this, "Coffee timer set for 2 hours", Toast.LENGTH_SHORT).show();
                 setSessionButtonVisibility();
                 return true;
             case R.id.menu_item_stop_session:
+                //stop timer session - cancel alarm & notification
                 if (alarmManager != null) {
                     alarmManager.cancel(pendingIntent);
                 }
@@ -165,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Toast.makeText(this, "Coffee timer cancelled", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_item_find_coffee:
+                //launch PlacePicker activity to find nearby coffee shop
                 intent = new Intent(this, CoffeePickerActivity.class);
                 startActivity(intent);
                 return true;
@@ -214,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //update each active widget with time of most recent coffee
         for (int appWidgetId : appWidgetIds) {
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE");
+            DateFormat sdf = android.text.format.DateFormat.getDateFormat(this);
+            //new SimpleDateFormat("HH:mm EEE");
             Date d = new Date(coffeeTime);
             rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
             //partial update refreshes value of TextView with most recent coffee time but leaves the
