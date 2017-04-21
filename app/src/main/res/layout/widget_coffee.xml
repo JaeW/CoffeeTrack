@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:minHeight="56dp"
-    android:minWidth="215dp"
+    android:layout_height="60dp"
+    android:minHeight="60dp"
+    android:minWidth="180dp"
     android:orientation="horizontal"
+    android:background="@drawable/widget_background"
     android:paddingBottom="@dimen/widget_top_bottom_padding"
-    android:paddingLeft="@dimen/widget_left_right_padding"
+    android:paddingLeft="@dimen/widget_left_padding"
     android:paddingRight="@dimen/widget_left_right_padding"
-    android:paddingTop="@dimen/widget_top_bottom_padding">
+    android:paddingTop="@dimen/widget_top_padding">
 
     <RelativeLayout
         android:id="@+id/widget_Layout_last_coffee_was"
@@ -23,12 +24,15 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:textColor="@color/colorPrimaryText"
             android:text="@string/last_coffee_was"/>
 
         <TextView
             android:id="@+id/date_time_last_coffee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/text_last_coffee"/>
 
     </RelativeLayout>

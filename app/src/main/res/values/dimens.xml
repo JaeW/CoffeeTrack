@@ -10,4 +10,6 @@
     <!-- android recommended for 1 cell -->
     <dimen name="widget_min_height">40dp</dimen>
     <dimen name="row_holder_right_left_padding">16dp</dimen>
+    <dimen name="widget_left_padding">16dp</dimen>
+    <dimen name="widget_top_padding">8dp</dimen>
 </resources>
