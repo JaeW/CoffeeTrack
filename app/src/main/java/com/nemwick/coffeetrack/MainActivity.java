@@ -37,7 +37,6 @@ import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         builder.setContentTitle("Coffee Track Reminder");
         builder.setContentText("Time to drink coffee");
         builder.setAutoCancel(true);
-        builder.setColor(getResources().getColor(R.color.colorAccent));
+        builder.setColor(ContextCompat.getColor(this, R.color.colorAccent));
 
         Intent intent = new Intent(this, CoffeePickerActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

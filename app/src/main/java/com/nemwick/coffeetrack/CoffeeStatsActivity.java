@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.nemwick.coffeetrack.data.CoffeeContract;
+import com.nemwick.coffeetrack.utils.DateUtils;
 
 import java.util.Calendar;
 
@@ -44,7 +45,7 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Long oneMonthAgo = this.calculatePriorDateInMillis(MONTH);
+        Long oneMonthAgo = DateUtils.calculatePriorDateInMillis(MONTH);
         Uri queryUri = CoffeeContract.CoffeeEntry.CONTENT_URI;
         String[] projection = {CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME};
         String selection = CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME + " >= ?";
@@ -58,8 +59,8 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         int monthTotal = data.getCount();
         int weekTotal = 0;
         int dayTotal = 0;
-        long weekInMillis = this.calculatePriorDateInMillis(WEEK); //Unix date in millis for one week prior to today
-        long dayInMillis = this.calculatePriorDateInMillis(DAY); //Unix date in millis for one day prior to today
+        long weekInMillis = DateUtils.calculatePriorDateInMillis(WEEK); //Unix date in millis for one week prior to today
+        long dayInMillis = DateUtils.calculatePriorDateInMillis(DAY); //Unix date in millis for one day prior to today
         //on screen rotation, 3 text view values must be recalculated
         //the Cursor, however, is stuck in the last position and does not move back to first
         // position if not explicitly directed to do so
@@ -85,10 +86,4 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         //intentionally left empty
     }
 
-    private long calculatePriorDateInMillis(int days) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DATE, c.get(Calendar.DATE) - days);
-        long value = c.getTimeInMillis();
-        return c.getTimeInMillis();
-    }
 }
