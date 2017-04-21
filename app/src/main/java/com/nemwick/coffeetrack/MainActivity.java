@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //update each active widget with time of most recent coffee
         for (int appWidgetId : appWidgetIds) {
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
-            DateFormat sdf = android.text.format.DateFormat.getDateFormat(this);
+            DateFormat sdf = new SimpleDateFormat("HH:mm EEE");
             //new SimpleDateFormat("HH:mm EEE");
             Date d = new Date(coffeeTime);
             rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
