@@ -1,6 +1,7 @@
 package com.nemwick.coffeetrack;
 
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -8,8 +9,10 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 import com.nemwick.coffeetrack.utils.DateUtils;
 
@@ -33,6 +36,11 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         //toolbar setup
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_statistics));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //load image
+        ImageView imageView = (ImageView) findViewById(R.id.image_statistics);
+        Glide.with(this).load(R.drawable.coffee_stats).into(imageView);
+
 
         //field - view binding
         dayCupsCoffee = (TextView) findViewById(R.id.cups_today);
@@ -64,6 +72,8 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         //on screen rotation, 3 text view values must be recalculated
         //the Cursor, however, is stuck in the last position and does not move back to first
         // position if not explicitly directed to do so
+
+        //TODO:  refactor using DateUtils methods
         data.moveToPosition(-1);
         while (data.moveToNext()) {
             long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
