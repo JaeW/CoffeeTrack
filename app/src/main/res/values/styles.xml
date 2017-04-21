@@ -10,7 +10,7 @@
     </style>
 
     <style name="CMOptionsMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:popupBackground">@color/colorPrimaryLight</item>
+        <item name="android:popupBackground">@color/colorIcons</item>
     </style>
 
     <style name="picker_detail_text_views">

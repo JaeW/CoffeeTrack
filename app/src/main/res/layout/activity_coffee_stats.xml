@@ -13,60 +13,59 @@
         style="@style/ThemeOverlay.AppCompat.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
         android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
         android:elevation="@dimen/toolbar_elevation"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-    
+
     <ImageView
         android:id="@+id/image_statistics"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@id/toolbar_statistics"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/image_statistics"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="48dp"
         android:layout_marginRight="80dp"
-        android:columnCount="2"
-        android:layout_below="@id/image_statistics">
+        android:layout_marginTop="48dp"
+        android:columnCount="2">
 
         <TextView
-            android:text="@string/statistics_today"
             style="@style/stats_grid_view_text"
-            android:layout_columnWeight="1"/>
+            android:layout_columnWeight="1"
+            android:text="@string/statistics_today" />
 
         <TextView
             android:id="@+id/cups_today"
-            android:gravity="right"
+            style="@style/stats_grid_view_text"
             android:layout_columnWeight="1"
-            style="@style/stats_grid_view_text"/>
-
+            android:gravity="right" />
 
         <TextView
-            android:text="@string/statistics_this_week"
+            style="@style/stats_grid_view_text"
             android:layout_columnWeight="1"
-            style="@style/stats_grid_view_text"/>
+            android:text="@string/statistics_this_week" />
 
         <TextView
             android:id="@+id/cups_week"
-            android:gravity="right"
+            style="@style/stats_grid_view_text"
             android:layout_columnWeight="1"
-            style="@style/stats_grid_view_text"/>
+            android:gravity="right" />
 
         <TextView
-            android:text="@string/statistics_this_month"
+            style="@style/stats_grid_view_text"
             android:layout_columnWeight="1"
-            style="@style/stats_grid_view_text"/>
+            android:text="@string/statistics_this_month" />
 
         <TextView
             android:id="@+id/cups_month"
+            style="@style/stats_grid_view_text"
             android:layout_columnWeight="1"
-            android:gravity="right"
-            style="@style/stats_grid_view_text"/>
+            android:gravity="right" />
 
     </GridLayout>
 

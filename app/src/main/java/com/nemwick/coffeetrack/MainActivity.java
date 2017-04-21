@@ -23,6 +23,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -107,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         adapter = new RecyclerViewCursorAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
+        //recyclervview
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         //cursorloader initialization
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
@@ -277,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
         pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + TWO_HOURS;
+        long futureInMillis = SystemClock.elapsedRealtime() + duration;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
