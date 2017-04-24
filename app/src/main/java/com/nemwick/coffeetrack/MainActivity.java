@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 scheduleNotification();
                 saveSessionTimerState(true);
                 Toast.makeText(this, "Coffee timer set for 2 hours", Toast.LENGTH_SHORT).show();
+                //TODO:  replace with 2 hours after demo video completed
                 setSessionButtonVisibility();
                 return true;
             case R.id.menu_item_stop_session:
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
         pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + duration;
+        long futureInMillis = SystemClock.elapsedRealtime() + TWO_HOURS;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
