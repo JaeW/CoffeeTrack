@@ -1,6 +1,8 @@
 # CoffeeTrack
 Collects data on when and how much coffee is consumed by user
 
+Screenshots and video walkthrough can be found <a href="https://drive.google.com/open?id=0B7qEcDHnpYmqSU51OEM4QnBPeUU">here</a>.  
+
 
 After realizing that (more than once) I had consumed an entire pot of coffee within far too short a timeframe, I knew I needed an app.
 Drink a cup of coffee and tap a button on my smartphone.  Have a widget that shows me the last time I drank a cup so that I don't end up 
@@ -21,6 +23,7 @@ thereafter the user will be reminded in two hours to have another cup.  This kee
 location.  [Completed 2017 April 13]
 
 4.  Bonus Phase:  Make it Pretty!  Apply Material Design principles.  Add images. And other things.  [Completed 2017 April 21]
+
 
 
 
