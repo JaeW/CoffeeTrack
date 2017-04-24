@@ -1,5 +1,5 @@
 # CoffeeTrack
-Collects data on where, when and how much coffee is consumed by user
+Collects data on when and how much coffee is consumed by user
 
 
 After realizing that (more than once) I had consumed an entire pot of coffee within far too short a timeframe, I knew I needed an app.
@@ -20,4 +20,10 @@ thereafter the user will be reminded in two hours to have another cup.  This kee
 3.  When notifications from phase 2 implementation appear, user is offered option of finding coffee shops closest to his/her current
 location.  [Completed 2017 April 13]
 
-4.  Bonus Phase:  Make it Pretty!  Apply Material Design principles.  Add images. And other things.  
+4.  Bonus Phase:  Make it Pretty!  Apply Material Design principles.  Add images. And other things.  [Completed 2017 April 21]
+
+
+
+
+
+
