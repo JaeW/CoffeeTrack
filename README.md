@@ -1,5 +1,5 @@
 # CoffeeTrack
-Collects data on where, when and how much coffee is consumed by user
+Collects data on when and how much coffee is consumed by user
 
 
 After realizing that (more than once) I had consumed an entire pot of coffee within far too short a timeframe, I knew I needed an app.
