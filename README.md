@@ -22,4 +22,13 @@ location.  [Completed 2017 April 13]
 
 4.  Bonus Phase:  Make it Pretty!  Apply Material Design principles.  Add images. And other things.  [Completed 2017 April 21]
 
+<img src="https://drive.google.com/open?id=0B7qEcDHnpYmqY1pqV1lqTjctb00" alt="Home Screen Widget">
+
+<img src="https://drive.google.com/open?id=0B7qEcDHnpYmqV2xxNDUwT1JFeTA" alt="Main Activity">
+
+<img src="https://drive.google.com/open?id=0B7qEcDHnpYmqX1U0dTRVeUc5NHM" alt="Coffee Locator Activity">
+
+<img src="https://drive.google.com/open?id=0B7qEcDHnpYmqMGZFVDJLMTRkaDA" alt="Coffee Consumption Statistics Activity">
+
+
 
