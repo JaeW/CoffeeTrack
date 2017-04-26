@@ -228,7 +228,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         for (int appWidgetId : appWidgetIds) {
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_coffee);
             DateFormat sdf = new SimpleDateFormat("HH:mm EEE");
-            //new SimpleDateFormat("HH:mm EEE");
             Date d = new Date(coffeeTime);
             rv.setTextViewText(R.id.date_time_last_coffee, sdf.format(d));
             //partial update refreshes value of TextView with most recent coffee time but leaves the
@@ -262,8 +261,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_maps_local_cafe);
-        builder.setContentTitle("Coffee Track Reminder");
-        builder.setContentText("Time to drink coffee");
+        builder.setContentTitle(getString(R.string.notification_title));
+        builder.setContentText(getString(R.string.notification_text));
         builder.setAutoCancel(true);
         builder.setColor(ContextCompat.getColor(this, R.color.colorAccent));
 
@@ -278,14 +277,16 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 );
         builder.setContentIntent(resultPendingIntent);
         Notification notification = builder.build();
-        notification.defaults = Notification.DEFAULT_SOUND;
+        //get notification ringtone from shared preferences
+        String sound = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.ringtone_preference_key), getString(R.string.ringtone_default));
+        notification.sound = Uri.parse(sound);
         return notification;
     }
 
     private void scheduleNotification() {
         //get timer duraction from preferences - units in seconds
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        timerDurationInSeconds = Integer.parseInt(preferences.getString("timer", "1800"));
+        timerDurationInSeconds = Integer.parseInt(preferences.getString(getString(R.string.timer_preference_key), Integer.toString(DateUtils.DEFAULT_TIMER_DURACTION)));
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, buildAlarmNotification());

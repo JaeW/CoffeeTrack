@@ -12,6 +12,7 @@ public class DateUtils {
     public static final int BEFORE_MONTH = 4;
     public static final int HOUR_IN_SECONDS = 3600;
     public static final int MINUTE_IN_SECONDS = 60;
+    public static final int DEFAULT_TIMER_DURACTION = 1800;  //2 hours
 
     public static long calculatePriorDateInMillis(int days) {
         Calendar c = Calendar.getInstance();
@@ -37,6 +38,7 @@ public class DateUtils {
         return c;
     }
 
+    //method unused at present - retaining for (possible) future feature implementation
     public static int convertSimpleDayFormat(long val) {
         Calendar today = Calendar.getInstance();
         today = clearTimes(today);

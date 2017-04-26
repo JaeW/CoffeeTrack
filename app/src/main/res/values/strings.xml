@@ -22,4 +22,9 @@
     <string name="settings">Settings</string>
     <string name="find_coffee">Find Coffee</string>
     <string name="stop_timer">Stop Timer</string>
+    <string name="timer_preference_key">timer</string>
+    <string name="ringtone_preference_key">ringtone</string>
+    <string name="notification_title">Coffee Track Reminder</string>
+    <string name="notification_text">Time to drink coffee</string>
+    <string name="ringtone_default">Default ringtone</string>
 </resources>
