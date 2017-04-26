@@ -25,7 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-public class CoffeePickerActivity extends AppCompatActivity {
+public class ActivityCoffeePicker extends AppCompatActivity {
 
     private static final int PLACE_PICKER_REQUEST = 1;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
@@ -54,7 +54,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     //launch PlacePicker which allows user to choose from list of places nearby
                     PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                     try {
-                        Intent intent = builder.build(CoffeePickerActivity.this);
+                        Intent intent = builder.build(ActivityCoffeePicker.this);
                         startActivityForResult(intent, PLACE_PICKER_REQUEST);
                     } catch (GooglePlayServicesRepairableException e) {
                         e.printStackTrace();
@@ -75,7 +75,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
                     //call establishment obtained from PlacePicker
                     requestPhonePermission();
                     if (coffeeShopPhone.getText() != null) {
-                        if (ContextCompat.checkSelfPermission(CoffeePickerActivity.this,
+                        if (ContextCompat.checkSelfPermission(ActivityCoffeePicker.this,
                                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + coffeeShopPhone.getText()));
                             startActivity(intent);
@@ -151,7 +151,7 @@ public class CoffeePickerActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             try {
                 //get place object from user's choice in PlacePicker
-                place = PlacePicker.getPlace(CoffeePickerActivity.this, data);
+                place = PlacePicker.getPlace(ActivityCoffeePicker.this, data);
                 //show hidden imagebuttons
                 locationButton.setVisibility(View.VISIBLE);
                 phoneButton.setVisibility(View.VISIBLE);

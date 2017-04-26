@@ -24,7 +24,7 @@
             android:value="AIzaSyCvV0cEGLe7HvTp1N8d5AoiSHa0J6dOegM" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityMain"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -54,22 +54,22 @@
         <receiver android:name=".NotificationReceiver" />
 
         <activity
-            android:name=".CoffeeStatsActivity"
+            android:name=".ActivityCoffeeStats"
             android:label="@string/activity_coffee_stats_label"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ActivityMain">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ActivityMain" />
         </activity>
 
         <activity
-            android:name=".CoffeePickerActivity"
+            android:name=".ActivityCoffeePicker"
             android:label="Find Coffee Nearby"
             android:launchMode="singleInstance"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ActivityMain">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ActivityMain" />
         </activity>
 
     </application>

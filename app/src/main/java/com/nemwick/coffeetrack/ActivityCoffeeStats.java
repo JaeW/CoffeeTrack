@@ -1,7 +1,6 @@
 package com.nemwick.coffeetrack;
 
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -16,9 +15,7 @@ import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
 import com.nemwick.coffeetrack.utils.DateUtils;
 
-import java.util.Calendar;
-
-public class CoffeeStatsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ActivityCoffeeStats extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private TextView dayCupsCoffee;
     private TextView weekCupsCoffee;
     private TextView monthCupsCoffee;
@@ -26,7 +23,7 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
     public static final int DAY = 1;
     public static final int WEEK = 7;
     public static final int MONTH = 30;
-    public static final String TAG = "CoffeeStatsActivity:  ";
+    public static final String TAG = "ActivityCoffeeStats:  ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +70,15 @@ public class CoffeeStatsActivity extends AppCompatActivity implements LoaderMana
         //the Cursor, however, is stuck in the last position and does not move back to first
         // position if not explicitly directed to do so
 
-        //TODO:  refactor using DateUtils methods
         data.moveToPosition(-1);
         while (data.moveToNext()) {
             long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
             if (weekInMillis <= tempTimeValue) {
                 weekTotal++;
-            }  //if coffee drunk after one week ago timestamp, increment
+            }  //if coffee drunk < one week ago, increment
             if (dayInMillis <= tempTimeValue) {
                 dayTotal++;
-            } //if coffee drunk after one day ago timestampe, increment
+            } //if coffee drunk < one day ago, increment
         }
 
         //populate TextViews with values

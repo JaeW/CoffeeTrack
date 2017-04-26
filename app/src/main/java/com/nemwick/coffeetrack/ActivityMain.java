@@ -41,7 +41,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class ActivityMain extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int LOADER_ID = 111;
     public static final String COFFEE_PREFERENCES = "preferenceFile"; //key to retrieve saved preferences file
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         switch (item.getItemId()) {
             case R.id.menu_item_coffee_stats:
                 //view coffee consumption statistics for last month in new activity
-                intent = new Intent(this, CoffeeStatsActivity.class);
+                intent = new Intent(this, ActivityCoffeeStats.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_item_start_session:
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 return true;
             case R.id.menu_item_find_coffee:
                 //launch PlacePicker activity to find nearby coffee shop
-                intent = new Intent(this, CoffeePickerActivity.class);
+                intent = new Intent(this, ActivityCoffeePicker.class);
                 startActivity(intent);
                 return true;
             default:
@@ -263,9 +263,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         builder.setAutoCancel(true);
         builder.setColor(ContextCompat.getColor(this, R.color.colorAccent));
 
-        Intent intent = new Intent(this, CoffeePickerActivity.class);
+        Intent intent = new Intent(this, ActivityCoffeePicker.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(CoffeePickerActivity.class);
+        stackBuilder.addParentStack(ActivityCoffeePicker.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
@@ -345,4 +345,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         item.setVisible(true);
     }
 
-}//end MainActivity
+}//end ActivityMain

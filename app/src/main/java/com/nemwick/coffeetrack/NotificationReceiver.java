@@ -20,11 +20,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         int id = intent.getIntExtra(NOTIFICATION_ID, 0);
         notificationManager.notify(id, notification);
 
-        //update value in preferences of timer on/off which will trigger update in MainActivity UI
+        //update value in preferences of timer on/off which will trigger update in ActivityMain UI
         SharedPreferences preferences =
-                context.getSharedPreferences(MainActivity.COFFEE_PREFERENCES, Context.MODE_PRIVATE);
+                context.getSharedPreferences(ActivityMain.COFFEE_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(MainActivity.SESSION_TIMER_STATE, false);
+        editor.putBoolean(ActivityMain.SESSION_TIMER_STATE, false);
         editor.apply();
     }
 }
