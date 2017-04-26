@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:dialogTitle="@string/timer_pref_dialog_title"
+        android:entries="@array/timer_durations"
+        android:entryValues="@array/timer_values_in_seconds"
+        android:key="timer"
+        android:summary="@string/timer_pref_summary"
+        android:title="@string/timer_pref_title" />
+
+    <RingtonePreference
+        android:key="ringtone"
+        android:showDefault="true"
+        android:showSilent="true"
+        android:summary="@string/ringtone_pref_summary"
+        android:title="@string/ringtone_pref_title" />
+
+</PreferenceScreen>

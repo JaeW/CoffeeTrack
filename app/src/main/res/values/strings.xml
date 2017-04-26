@@ -14,4 +14,12 @@
     <string name="phone_icon_button">Phone icon button</string>
     <string name="website_icon_button">Website icon button</string>
     <string name="find_me_coffee">Find Coffee</string>
+    <string name="timer_pref_summary">Tap to choose timer duration</string>
+    <string name="timer_pref_dialog_title">Timer duraction preference</string>
+    <string name="timer_pref_title">Timer Duration</string>
+    <string name="ringtone_pref_summary">Choose alarm tone</string>
+    <string name="ringtone_pref_title">Alarm Ringtone</string>
+    <string name="settings">Settings</string>
+    <string name="find_coffee">Find Coffee</string>
+    <string name="stop_timer">Stop Timer</string>
 </resources>

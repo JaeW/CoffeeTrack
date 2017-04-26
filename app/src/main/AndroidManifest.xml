@@ -29,6 +29,7 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,7 +62,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityMain" />
         </activity>
-
         <activity
             android:name=".ActivityCoffeePicker"
             android:label="Find Coffee Nearby"
@@ -71,7 +71,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityMain" />
         </activity>
-
+        <activity android:name=".ActivityEditPreferences"></activity>
     </application>
 
 </manifest>

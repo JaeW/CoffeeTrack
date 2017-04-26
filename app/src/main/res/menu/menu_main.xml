@@ -15,12 +15,17 @@
 
     <item
         android:id="@+id/menu_item_stop_session"
-        android:title="Stop Timer"
+        android:title="@string/stop_timer"
         android:icon="@drawable/ic_alarm_off_white_24dp"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/menu_item_find_coffee"
-        android:title="Find Coffee"
+        android:title="@string/find_coffee"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_item_settings"
+        android:title="@string/settings"
         app:showAsAction="never"/>
 
 </menu>

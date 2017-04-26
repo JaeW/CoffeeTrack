@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nemwick.coffeetrack.data.CoffeeContract;
+import com.nemwick.coffeetrack.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,8 +57,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     private Menu menu;
     private RecyclerViewCursorAdapter adapter;
     private Snackbar snackbar;
-    public static final long duration = 30 * 1000; //TODO:  temporary variable for testing - delete when final
-    public static final long TWO_HOURS = 2 * 60 * 60 * 1000;
+    private int timerDurationInSeconds;
 
 
     private View.OnClickListener mainClickListener = new View.OnClickListener() {
@@ -159,8 +160,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 //start timer session - launches alarm & notification
                 scheduleNotification();
                 saveSessionTimerState(true);
-                Toast.makeText(this, "Coffee timer set for 2 hours", Toast.LENGTH_SHORT).show();
-                //TODO:  replace with 2 hours after demo video completed
+                Toast.makeText(this, "Coffee timer set for " + DateUtils.calculateTextDuration(timerDurationInSeconds), Toast.LENGTH_SHORT).show();
                 setSessionButtonVisibility();
                 return true;
             case R.id.menu_item_stop_session:
@@ -175,6 +175,10 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             case R.id.menu_item_find_coffee:
                 //launch PlacePicker activity to find nearby coffee shop
                 intent = new Intent(this, ActivityCoffeePicker.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_item_settings:
+                intent = new Intent(this, ActivityEditPreferences.class);
                 startActivity(intent);
                 return true;
             default:
@@ -279,12 +283,16 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     }
 
     private void scheduleNotification() {
+        //get timer duraction from preferences - units in seconds
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        timerDurationInSeconds = Integer.parseInt(preferences.getString("timer", "1800"));
+
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, buildAlarmNotification());
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
         pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + TWO_HOURS;
+        long futureInMillis = SystemClock.elapsedRealtime() + timerDurationInSeconds * 1000;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
