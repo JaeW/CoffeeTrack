@@ -73,10 +73,10 @@ public class ActivityCoffeeStats extends AppCompatActivity implements LoaderMana
         data.moveToPosition(-1);
         while (data.moveToNext()) {
             long tempTimeValue = data.getLong(data.getColumnIndex(CoffeeContract.CoffeeEntry.COLUMN_COFFEE_TIME));
-            if (weekInMillis <= tempTimeValue) {
+            if (DateUtils.convertSimpleDayFormat(tempTimeValue) == DateUtils.THIS_WEEK) {
                 weekTotal++;
             }  //if coffee drunk < one week ago, increment
-            if (dayInMillis <= tempTimeValue) {
+            if (DateUtils.convertSimpleDayFormat(tempTimeValue) == DateUtils.TODAY) {
                 dayTotal++;
             } //if coffee drunk < one day ago, increment
         }
