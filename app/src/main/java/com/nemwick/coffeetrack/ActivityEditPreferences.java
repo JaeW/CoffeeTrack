@@ -16,6 +16,7 @@ public class ActivityEditPreferences extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.preferences_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Settings");
 
         if (getFragmentManager().findFragmentById(R.id.content_frame) == null) {
             getFragmentManager().beginTransaction()
