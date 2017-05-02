@@ -49,8 +49,8 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
         } else{
             holder.itemHolder.setBackgroundColor(colorOther);
         }
-        holder.tvCoffeeTime.setText(formatTime(dateObjectCoffee));
-        holder.tvCoffeeDate.setText(formatDate(dateObjectCoffee));
+        holder.tvCoffeeTime.setText(DateUtils.formatTime(context, dateObjectCoffee));
+        holder.tvCoffeeDate.setText(DateUtils.formatDate(context, dateObjectCoffee));
     }
 
     @Override
@@ -71,16 +71,6 @@ public class RecyclerViewCursorAdapter extends RecyclerView.Adapter<RecyclerView
     void setCursor(Cursor cursor) {
         coffeeCursor = cursor;
         notifyDataSetChanged();
-    }
-
-    private String formatDate(Date dateObject) {
-        DateFormat df = android.text.format.DateFormat.getDateFormat(context);
-        return df.format(dateObject);
-    }
-
-    private String formatTime(Date dateObject) {
-        DateFormat df = android.text.format.DateFormat.getTimeFormat(context);
-        return df.format(dateObject);
     }
 
     static class CoffeeHolder extends RecyclerView.ViewHolder {

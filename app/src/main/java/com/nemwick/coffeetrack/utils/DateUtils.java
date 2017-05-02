@@ -1,7 +1,11 @@
 package com.nemwick.coffeetrack.utils;
 
 
+import android.content.Context;
+
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtils {
 
@@ -68,4 +72,16 @@ public class DateUtils {
             return BEFORE_MONTH;
         }
     }
+
+    public static String formatTime(Context context, Date dateObject) {
+        DateFormat df = android.text.format.DateFormat.getTimeFormat(context);
+        return df.format(dateObject);
+    }
+
+    public static String formatDate(Context context, Date dateObject) {
+        DateFormat df = android.text.format.DateFormat.getDateFormat(context);
+        return df.format(dateObject);
+    }
+
+
 }

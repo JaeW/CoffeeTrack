@@ -28,6 +28,7 @@ public class CoffeeWidgetProvider extends AppWidgetProvider {
     public static final String TAG = "CoffeeWidgetProvider"; //debug log tag
     private long coffeeTime;
 
+
     //called when Widget is added to Host and when widget button is pressed
     //does not update periodically, only on user button click
     @Override
